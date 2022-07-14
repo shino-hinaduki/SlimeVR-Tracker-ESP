@@ -14,8 +14,9 @@ COLOR_GRAY = f'{COLOR_ESC}30;1m'
 
 
 class Board(Enum):
-    SLIMEVR = "BOARD_SLIMEVR"
-    WROOM32 = "BOARD_WROOM32"
+    SLIMEVR   = "BOARD_SLIMEVR"
+    WROOM32   = "BOARD_WROOM32"
+    M5STICK_C = "BOARD_M5STICK_C"
 
 
 class DeviceConfiguration:
@@ -56,6 +57,14 @@ class DeviceConfiguration:
             imu_int = "23"
             imu_int2 = "25"
             battery_level = "36"
+        elif self.board == Board.M5STICK_C:
+            sda = "21"
+            scl = "22"
+            imu_int = "35"
+            imu_int2 = ""
+            battery_level = ""
+            led_pin = "9"
+            led_invert = True
         else:
             raise Exception(f"Unknown board: {self.board.value}")
 

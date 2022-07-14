@@ -46,7 +46,7 @@ namespace SlimeVR
                 firstIMUAddress = I2CSCAN::pickDevice(0x4A, 0x4B, true);
 #elif IMU == IMU_BNO055
                 firstIMUAddress = I2CSCAN::pickDevice(0x29, 0x28, true);
-#elif IMU == IMU_MPU9250 || IMU == IMU_BMI160 || IMU == IMU_MPU6500 || IMU == IMU_MPU6050 || IMU == IMU_ICM20948
+#elif IMU == IMU_MPU9250 || IMU == IMU_BMI160 || IMU == IMU_MPU6500 || IMU == IMU_MPU6050 || IMU == IMU_ICM20948 || IMU == IMU_MPU6886
                 firstIMUAddress = I2CSCAN::pickDevice(0x68, 0x69, true);
 #else
 #error Unsupported primary IMU
@@ -68,7 +68,7 @@ namespace SlimeVR
                     m_Sensor1 = new MPU9250Sensor(0, firstIMUAddress, IMU_ROTATION);
 #elif IMU == IMU_BMI160
                     m_Sensor1 = new BMI160Sensor(0, firstIMUAddress, IMU_ROTATION);
-#elif IMU == IMU_MPU6500 || IMU == IMU_MPU6050
+#elif IMU == IMU_MPU6500 || IMU == IMU_MPU6050 || IMU == IMU_MPU6886
                     m_Sensor1 = new MPU6050Sensor(0, IMU, firstIMUAddress, IMU_ROTATION);
 #elif IMU == IMU_ICM20948
                     m_Sensor1 = new ICM20948Sensor(0, firstIMUAddress, IMU_ROTATION);
@@ -83,7 +83,7 @@ namespace SlimeVR
                 secondIMUAddress = I2CSCAN::pickDevice(0x4B, 0x4A, false);
 #elif SECOND_IMU == IMU_BNO055
                 secondIMUAddress = I2CSCAN::pickDevice(0x28, 0x29, false);
-#elif SECOND_IMU == IMU_MPU9250 || SECOND_IMU == IMU_BMI160 || SECOND_IMU == IMU_MPU6500 || SECOND_IMU == IMU_MPU6050 || SECOND_IMU == IMU_ICM20948
+#elif SECOND_IMU == IMU_MPU9250 || SECOND_IMU == IMU_BMI160 || SECOND_IMU == IMU_MPU6500 || SECOND_IMU == IMU_MPU6050 || SECOND_IMU == IMU_ICM20948 || SECOND_IMU == IMU_MPU6886
                 secondIMUAddress = I2CSCAN::pickDevice(0x69, 0x68, false);
 #else
 #error Unsupported secondary IMU
@@ -109,7 +109,7 @@ namespace SlimeVR
                     m_Sensor2 = new MPU9250Sensor(1, secondIMUAddress, SECOND_IMU_ROTATION);
 #elif SECOND_IMU == IMU_BMI160
                     m_Sensor2 = new BMI160Sensor(1, secondIMUAddress, SECOND_IMU_ROTATION);
-#elif SECOND_IMU == IMU_MPU6500 || IMU == IMU_MPU6050
+#elif SECOND_IMU == IMU_MPU6500 || IMU == IMU_MPU6050 || IMU == IMU_MPU6886
                     m_Sensor2 = new MPU6050Sensor(1, IMU, secondIMUAddress, SECOND_IMU_ROTATION);
 #elif SECOND_IMU == IMU_ICM20948
                     m_Sensor2 = new ICM20948Sensor(1, secondIMUAddress, SECOND_IMU_ROTATION);
