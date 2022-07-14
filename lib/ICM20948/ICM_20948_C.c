@@ -5,7 +5,7 @@
 /*
  * Icm20948 device require a DMP image to be loaded on init
  * Provide such images by mean of a byte array
-*/
+ */
 #if defined(ICM_20948_USE_DMP) // Only include the 14301 Bytes of DMP if ICM_20948_USE_DMP is defined
 
 #if defined(ARDUINO_ARCH_MBED) // ARDUINO_ARCH_MBED (APOLLO3 v2) does not support or require pgmspace.h / PROGMEM
@@ -127,7 +127,7 @@ ICM_20948_Status_e ICM_20948_init_struct(ICM_20948_Device_t *pdev)
   // Initialize all elements by 0 except for _last_bank
   // Initialize _last_bank to 4 (invalid bank number)
   // so ICM_20948_set_bank function does not skip issuing bank change operation
-  static const ICM_20948_Device_t init_device = { ._last_bank = 4 };
+  static const ICM_20948_Device_t init_device = {._last_bank = 4};
   *pdev = init_device;
   return ICM_20948_Stat_Ok;
 }
@@ -164,8 +164,8 @@ ICM_20948_Status_e ICM_20948_execute_r(ICM_20948_Device_t *pdev, uint8_t regaddr
   return (*pdev->_serif->read)(regaddr, pdata, len, pdev->_serif->user);
 }
 
-//Transact directly with an I2C device, one byte at a time
-//Used to configure a device before it is setup into a normal 0-3 peripheral slot
+// Transact directly with an I2C device, one byte at a time
+// Used to configure a device before it is setup into a normal 0-3 peripheral slot
 ICM_20948_Status_e ICM_20948_i2c_controller_periph4_txn(ICM_20948_Device_t *pdev, uint8_t addr, uint8_t reg, uint8_t *data, uint8_t len, bool Rw, bool send_reg_addr)
 {
   // Thanks MikeFair! // https://github.com/kriswiner/MPU9250/issues/86
@@ -226,7 +226,7 @@ ICM_20948_Status_e ICM_20948_i2c_controller_periph4_txn(ICM_20948_Device_t *pdev
       retval = ICM_20948_set_bank(pdev, 0);
       retval = ICM_20948_execute_r(pdev, AGB0_REG_I2C_MST_STATUS, (uint8_t *)&i2c_mst_status, 1);
 
-      peripheral4Done = (i2c_mst_status.I2C_PERIPH4_DONE /*| (millis() > tsTimeout) */); //Avoid forever-loops
+      peripheral4Done = (i2c_mst_status.I2C_PERIPH4_DONE /*| (millis() > tsTimeout) */); // Avoid forever-loops
       peripheral4Done |= (count >= max_cycles);
       count++;
     }
@@ -246,7 +246,7 @@ ICM_20948_Status_e ICM_20948_i2c_controller_periph4_txn(ICM_20948_Device_t *pdev
 
   if (txn_failed)
   {
-    //We often fail here if mag is stuck
+    // We often fail here if mag is stuck
     return ICM_20948_Stat_Err;
   }
 
@@ -636,15 +636,18 @@ ICM_20948_Status_e ICM_20948_set_sample_mode(ICM_20948_Device_t *pdev, ICM_20948
   }
   if (sensors & ICM_20948_Internal_Acc)
   {
-    if (reg.ACCEL_CYCLE != mode) retval = ICM_20948_Stat_Err;
+    if (reg.ACCEL_CYCLE != mode)
+      retval = ICM_20948_Stat_Err;
   }
   if (sensors & ICM_20948_Internal_Gyr)
   {
-    if (reg.GYRO_CYCLE != mode) retval = ICM_20948_Stat_Err;
+    if (reg.GYRO_CYCLE != mode)
+      retval = ICM_20948_Stat_Err;
   }
   if (sensors & ICM_20948_Internal_Mst)
   {
-    if (reg.I2C_MST_CYCLE != mode) retval = ICM_20948_Stat_Err;
+    if (reg.I2C_MST_CYCLE != mode)
+      retval = ICM_20948_Stat_Err;
   }
 
   return retval;
@@ -668,7 +671,8 @@ ICM_20948_Status_e ICM_20948_set_full_scale(ICM_20948_Device_t *pdev, ICM_20948_
     retval |= ICM_20948_execute_w(pdev, AGB2_REG_ACCEL_CONFIG, (uint8_t *)&reg, sizeof(ICM_20948_ACCEL_CONFIG_t));
     // Check the data was written correctly
     retval |= ICM_20948_execute_r(pdev, AGB2_REG_ACCEL_CONFIG, (uint8_t *)&reg, sizeof(ICM_20948_ACCEL_CONFIG_t));
-    if (reg.ACCEL_FS_SEL != fss.a) retval |= ICM_20948_Stat_Err;
+    if (reg.ACCEL_FS_SEL != fss.a)
+      retval |= ICM_20948_Stat_Err;
   }
   if (sensors & ICM_20948_Internal_Gyr)
   {
@@ -679,7 +683,8 @@ ICM_20948_Status_e ICM_20948_set_full_scale(ICM_20948_Device_t *pdev, ICM_20948_
     retval |= ICM_20948_execute_w(pdev, AGB2_REG_GYRO_CONFIG_1, (uint8_t *)&reg, sizeof(ICM_20948_GYRO_CONFIG_1_t));
     // Check the data was written correctly
     retval |= ICM_20948_execute_r(pdev, AGB2_REG_GYRO_CONFIG_1, (uint8_t *)&reg, sizeof(ICM_20948_GYRO_CONFIG_1_t));
-    if (reg.GYRO_FS_SEL != fss.g) retval |= ICM_20948_Stat_Err;
+    if (reg.GYRO_FS_SEL != fss.g)
+      retval |= ICM_20948_Stat_Err;
   }
   return retval;
 }
@@ -702,7 +707,8 @@ ICM_20948_Status_e ICM_20948_set_dlpf_cfg(ICM_20948_Device_t *pdev, ICM_20948_In
     retval |= ICM_20948_execute_w(pdev, AGB2_REG_ACCEL_CONFIG, (uint8_t *)&reg, sizeof(ICM_20948_ACCEL_CONFIG_t));
     // Check the data was written correctly
     retval |= ICM_20948_execute_r(pdev, AGB2_REG_ACCEL_CONFIG, (uint8_t *)&reg, sizeof(ICM_20948_ACCEL_CONFIG_t));
-    if (reg.ACCEL_DLPFCFG != cfg.a) retval |= ICM_20948_Stat_Err;
+    if (reg.ACCEL_DLPFCFG != cfg.a)
+      retval |= ICM_20948_Stat_Err;
   }
   if (sensors & ICM_20948_Internal_Gyr)
   {
@@ -713,7 +719,8 @@ ICM_20948_Status_e ICM_20948_set_dlpf_cfg(ICM_20948_Device_t *pdev, ICM_20948_In
     retval |= ICM_20948_execute_w(pdev, AGB2_REG_GYRO_CONFIG_1, (uint8_t *)&reg, sizeof(ICM_20948_GYRO_CONFIG_1_t));
     // Check the data was written correctly
     retval |= ICM_20948_execute_r(pdev, AGB2_REG_GYRO_CONFIG_1, (uint8_t *)&reg, sizeof(ICM_20948_GYRO_CONFIG_1_t));
-    if (reg.GYRO_DLPFCFG != cfg.g) retval |= ICM_20948_Stat_Err;
+    if (reg.GYRO_DLPFCFG != cfg.g)
+      retval |= ICM_20948_Stat_Err;
   }
   return retval;
 }
@@ -745,11 +752,13 @@ ICM_20948_Status_e ICM_20948_enable_dlpf(ICM_20948_Device_t *pdev, ICM_20948_Int
     retval |= ICM_20948_execute_r(pdev, AGB2_REG_ACCEL_CONFIG, (uint8_t *)&reg, sizeof(ICM_20948_ACCEL_CONFIG_t));
     if (enable)
     {
-      if (reg.ACCEL_FCHOICE != 1) retval |= ICM_20948_Stat_Err;
+      if (reg.ACCEL_FCHOICE != 1)
+        retval |= ICM_20948_Stat_Err;
     }
     else
     {
-      if (reg.ACCEL_FCHOICE != 0) retval |= ICM_20948_Stat_Err;
+      if (reg.ACCEL_FCHOICE != 0)
+        retval |= ICM_20948_Stat_Err;
     }
   }
   if (sensors & ICM_20948_Internal_Gyr)
@@ -770,11 +779,13 @@ ICM_20948_Status_e ICM_20948_enable_dlpf(ICM_20948_Device_t *pdev, ICM_20948_Int
     retval |= ICM_20948_execute_r(pdev, AGB2_REG_GYRO_CONFIG_1, (uint8_t *)&reg, sizeof(ICM_20948_GYRO_CONFIG_1_t));
     if (enable)
     {
-      if (reg.GYRO_FCHOICE != 1) retval |= ICM_20948_Stat_Err;
+      if (reg.GYRO_FCHOICE != 1)
+        retval |= ICM_20948_Stat_Err;
     }
     else
     {
-      if (reg.GYRO_FCHOICE != 0) retval |= ICM_20948_Stat_Err;
+      if (reg.GYRO_FCHOICE != 0)
+        retval |= ICM_20948_Stat_Err;
     }
   }
   return retval;
@@ -907,7 +918,7 @@ ICM_20948_Status_e ICM_20948_i2c_master_reset(ICM_20948_Device_t *pdev)
     return retval;
   }
 
-  ctrl.I2C_MST_RST = 1; //Reset!
+  ctrl.I2C_MST_RST = 1; // Reset!
 
   retval = ICM_20948_execute_w(pdev, AGB0_REG_USER_CTRL, (uint8_t *)&ctrl, sizeof(ICM_20948_USER_CTRL_t));
   if (retval != ICM_20948_Stat_Ok)
@@ -1025,7 +1036,7 @@ ICM_20948_Status_e ICM_20948_get_agmt(ICM_20948_Device_t *pdev, ICM_20948_AGMT_t
   }
 
   ICM_20948_Status_e retval = ICM_20948_Stat_Ok;
-  const uint8_t numbytes = 14 + 9; //Read Accel, gyro, temp, and 9 bytes of mag
+  const uint8_t numbytes = 14 + 9; // Read Accel, gyro, temp, and 9 bytes of mag
   uint8_t buff[numbytes];
 
   // Get readings
@@ -1043,7 +1054,7 @@ ICM_20948_Status_e ICM_20948_get_agmt(ICM_20948_Device_t *pdev, ICM_20948_AGMT_t
   pagmt->tmp.val = ((buff[12] << 8) | (buff[13] & 0xFF));
 
   pagmt->magStat1 = buff[14];
-  pagmt->mag.axes.x = ((buff[16] << 8) | (buff[15] & 0xFF)); //Mag data is read little endian
+  pagmt->mag.axes.x = ((buff[16] << 8) | (buff[15] & 0xFF)); // Mag data is read little endian
   pagmt->mag.axes.y = ((buff[18] << 8) | (buff[17] & 0xFF));
   pagmt->mag.axes.z = ((buff[20] << 8) | (buff[19] & 0xFF));
   pagmt->magStat2 = buff[22];
@@ -1121,7 +1132,7 @@ ICM_20948_Status_e ICM_20948_reset_FIFO(ICM_20948_Device_t *pdev)
     return retval;
   }
 
-  //delay ???
+  // delay ???
 
   ctrl.FIFO_RESET = 0x1E; // The InvenSense Nucleo examples write 0x1F followed by 0x1E
 
@@ -1283,11 +1294,11 @@ ICM_20948_Status_e ICM_20948_firmware_load(ICM_20948_Device_t *pdev)
 }
 
 /** @brief Loads the DMP firmware from SRAM
-* @param[in] data  pointer where the image
-* @param[in] size  size if the image
-* @param[in] load_addr  address to loading the image
-* @return 0 in case of success, -1 for any error
-*/
+ * @param[in] data  pointer where the image
+ * @param[in] size  size if the image
+ * @param[in] load_addr  address to loading the image
+ * @return 0 in case of success, -1 for any error
+ */
 ICM_20948_Status_e inv_icm20948_firmware_load(ICM_20948_Device_t *pdev, const unsigned char *data_start, unsigned short size_start, unsigned short load_addr)
 {
   int write_size;
@@ -1321,12 +1332,12 @@ ICM_20948_Status_e inv_icm20948_firmware_load(ICM_20948_Device_t *pdev, const un
   data = data_start;
   size = size_start;
   memaddr = load_addr;
-  #ifdef ICM_20948_USE_PROGMEM_FOR_DMP
+#ifdef ICM_20948_USE_PROGMEM_FOR_DMP
   unsigned char data_not_pg[INV_MAX_SERIAL_READ]; // Suggested by @HyperKokichi in Issue #63
-  #endif
+#endif
   while (size > 0)
   {
-    //write_size = min(size, INV_MAX_SERIAL_WRITE); // Write in chunks of INV_MAX_SERIAL_WRITE
+    // write_size = min(size, INV_MAX_SERIAL_WRITE); // Write in chunks of INV_MAX_SERIAL_WRITE
     if (size <= INV_MAX_SERIAL_WRITE) // Write in chunks of INV_MAX_SERIAL_WRITE
       write_size = size;
     else
@@ -1337,7 +1348,7 @@ ICM_20948_Status_e inv_icm20948_firmware_load(ICM_20948_Device_t *pdev, const un
       write_size = (memaddr & 0xff) + write_size - 0x100;
     }
 #ifdef ICM_20948_USE_PROGMEM_FOR_DMP
-    memcpy_P(data_not_pg, data, write_size);  // Suggested by @HyperKokichi in Issue #63
+    memcpy_P(data_not_pg, data, write_size); // Suggested by @HyperKokichi in Issue #63
     result = inv_icm20948_write_mems(pdev, memaddr, write_size, (unsigned char *)data_not_pg);
 #else
     result = inv_icm20948_write_mems(pdev, memaddr, write_size, (unsigned char *)data);
@@ -1356,7 +1367,7 @@ ICM_20948_Status_e inv_icm20948_firmware_load(ICM_20948_Device_t *pdev, const un
   memaddr = load_addr;
   while (size > 0)
   {
-    //write_size = min(size, INV_MAX_SERIAL_READ); // Read in chunks of INV_MAX_SERIAL_READ
+    // write_size = min(size, INV_MAX_SERIAL_READ); // Read in chunks of INV_MAX_SERIAL_READ
     if (size <= INV_MAX_SERIAL_READ) // Read in chunks of INV_MAX_SERIAL_READ
       write_size = size;
     else
@@ -1368,9 +1379,9 @@ ICM_20948_Status_e inv_icm20948_firmware_load(ICM_20948_Device_t *pdev, const un
     }
     result = inv_icm20948_read_mems(pdev, memaddr, write_size, data_cmp);
     if (result != ICM_20948_Stat_Ok)
-      flag++;                               // Error, DMP not written correctly
+      flag++; // Error, DMP not written correctly
 #ifdef ICM_20948_USE_PROGMEM_FOR_DMP
-    memcpy_P(data_not_pg, data, write_size);  // Suggested by @HyperKokichi in Issue #63
+    memcpy_P(data_not_pg, data, write_size); // Suggested by @HyperKokichi in Issue #63
     if (memcmp(data_cmp, data_not_pg, write_size))
 #else
     if (memcmp(data_cmp, data, write_size)) // Compare the data
@@ -1381,14 +1392,14 @@ ICM_20948_Status_e inv_icm20948_firmware_load(ICM_20948_Device_t *pdev, const un
     memaddr += write_size;
   }
 
-  //Enable LP_EN since we disabled it at begining of this function.
+  // Enable LP_EN since we disabled it at begining of this function.
   result = ICM_20948_low_power(pdev, true); // Put chip into low power state
   if (result != ICM_20948_Stat_Ok)
     return result;
 
   if (!flag)
   {
-    //Serial.println("DMP Firmware was updated successfully..");
+    // Serial.println("DMP Firmware was updated successfully..");
     pdev->_firmware_loaded = true;
   }
 
@@ -1432,12 +1443,12 @@ ICM_20948_Status_e ICM_20948_set_dmp_start_address(ICM_20948_Device_t *pdev, uns
 }
 
 /**
-*  @brief       Write data to a register in DMP memory
-*  @param[in]   DMP memory address
-*  @param[in]   number of byte to be written
-*  @param[out]  output data from the register
-*  @return     0 if successful.
-*/
+ *  @brief       Write data to a register in DMP memory
+ *  @param[in]   DMP memory address
+ *  @param[in]   number of byte to be written
+ *  @param[out]  output data from the register
+ *  @return     0 if successful.
+ */
 ICM_20948_Status_e inv_icm20948_write_mems(ICM_20948_Device_t *pdev, unsigned short reg, unsigned int length, const unsigned char *data)
 {
   ICM_20948_Status_e result = ICM_20948_Stat_Ok;
@@ -1505,12 +1516,12 @@ ICM_20948_Status_e inv_icm20948_write_mems(ICM_20948_Device_t *pdev, unsigned sh
 }
 
 /**
-*  @brief      Read data from a register in DMP memory
-*  @param[in]  DMP memory address
-*  @param[in]  number of byte to be read
-*  @param[in]  input data from the register
-*  @return     0 if successful.
-*/
+ *  @brief      Read data from a register in DMP memory
+ *  @param[in]  DMP memory address
+ *  @param[in]  number of byte to be read
+ *  @param[in]  input data from the register
+ *  @return     0 if successful.
+ */
 ICM_20948_Status_e inv_icm20948_read_mems(ICM_20948_Device_t *pdev, unsigned short reg, unsigned int length, unsigned char *data)
 {
   ICM_20948_Status_e result = ICM_20948_Stat_Ok;
@@ -1547,9 +1558,9 @@ ICM_20948_Status_e inv_icm20948_read_mems(ICM_20948_Device_t *pdev, unsigned sho
     lStartAddrSelected = (reg & 0xff);
 
     /* Sets the starting read or write address for the selected memory, inside of the selected page (see MEM_SEL Register).
-		   Contents are changed after read or write of the selected memory.
-		   This register must be written prior to each access to initialize the register to the proper starting address.
-		   The address will auto increment during burst transactions.  Two consecutive bursts without re-initializing the start address would skip one address. */
+       Contents are changed after read or write of the selected memory.
+       This register must be written prior to each access to initialize the register to the proper starting address.
+       The address will auto increment during burst transactions.  Two consecutive bursts without re-initializing the start address would skip one address. */
 
     result = ICM_20948_execute_w(pdev, AGB0_REG_MEM_START_ADDR, &lStartAddrSelected, 1);
     if (result != ICM_20948_Stat_Ok)
@@ -1941,7 +1952,7 @@ ICM_20948_Status_e inv_icm20948_enable_dmp_sensor_int(ICM_20948_Device_t *pdev, 
   data_intr_ctl[0] = (unsigned char)(delta >> 8);
   data_intr_ctl[1] = (unsigned char)(delta & 0xff);
   pdev->_dataIntrCtl = delta; // Diagnostics
-  
+
   // Write the interrupt control bits into memory address DATA_INTR_CTL
   result = inv_icm20948_write_mems(pdev, DATA_INTR_CTL, 2, (const unsigned char *)&data_intr_ctl);
 
@@ -2193,23 +2204,23 @@ ICM_20948_Status_e inv_icm20948_read_dmp_data(ICM_20948_Device_t *pdev, icm_2094
     // and looking at DMP frames which have the Gyro_Calibr bit set, that certainly seems to be true.
     // So, we'll skip this...:
     /*
-			if (fifo_count < icm_20948_DMP_Gyro_Calibr_Bytes) // Check if we need to read the FIFO count again
-			{
-					result = ICM_20948_get_FIFO_count(pdev, &fifo_count);
-					if (result != ICM_20948_Stat_Ok)
-							return result;
-			}
-			if (fifo_count < icm_20948_DMP_Gyro_Calibr_Bytes)
-					return ICM_20948_Stat_FIFOIncompleteData; // Bail if not enough data is available
-			result = ICM_20948_read_FIFO(pdev, &fifoBytes[0], icm_20948_DMP_Gyro_Calibr_Bytes);
-			if (result != ICM_20948_Stat_Ok)
-					return result;
-			for (int i = 0; i < icm_20948_DMP_Gyro_Calibr_Bytes; i++)
-			{
-					data->Gyro_Calibr.Bytes[DMP_Quat6_Byte_Ordering[i]] = fifoBytes[i]; // Correct the byte order (map big endian to little endian)
-			}
-			fifo_count -= icm_20948_DMP_Gyro_Calibr_Bytes; // Decrement the count
-			*/
+      if (fifo_count < icm_20948_DMP_Gyro_Calibr_Bytes) // Check if we need to read the FIFO count again
+      {
+          result = ICM_20948_get_FIFO_count(pdev, &fifo_count);
+          if (result != ICM_20948_Stat_Ok)
+              return result;
+      }
+      if (fifo_count < icm_20948_DMP_Gyro_Calibr_Bytes)
+          return ICM_20948_Stat_FIFOIncompleteData; // Bail if not enough data is available
+      result = ICM_20948_read_FIFO(pdev, &fifoBytes[0], icm_20948_DMP_Gyro_Calibr_Bytes);
+      if (result != ICM_20948_Stat_Ok)
+          return result;
+      for (int i = 0; i < icm_20948_DMP_Gyro_Calibr_Bytes; i++)
+      {
+          data->Gyro_Calibr.Bytes[DMP_Quat6_Byte_Ordering[i]] = fifoBytes[i]; // Correct the byte order (map big endian to little endian)
+      }
+      fifo_count -= icm_20948_DMP_Gyro_Calibr_Bytes; // Decrement the count
+      */
   }
 
   if ((data->header & DMP_header_bitmap_Compass_Calibr) > 0) // case DMP_header_bitmap_Compass_Calibr:
@@ -2327,25 +2338,25 @@ ICM_20948_Status_e inv_icm20948_read_dmp_data(ICM_20948_Device_t *pdev, icm_2094
     // lcm20948MPUFifoControl.c suggests icm_20948_DMP_Fsync_Detection_Bytes is not supported.
     // So, we'll skip this just in case...:
     /*
-			if (fifo_count < icm_20948_DMP_Fsync_Detection_Bytes) // Check if we need to read the FIFO count again
-			{
-					result = ICM_20948_get_FIFO_count(pdev, &fifo_count);
-					if (result != ICM_20948_Stat_Ok)
-							return result;
-			}
-			if (fifo_count < icm_20948_DMP_Fsync_Detection_Bytes)
-					return ICM_20948_Stat_FIFOIncompleteData; // Bail if not enough data is available
-			aShort = 0;
-			result = ICM_20948_read_FIFO(pdev, &fifoBytes[0], icm_20948_DMP_Fsync_Detection_Bytes);
-			if (result != ICM_20948_Stat_Ok)
-					return result;
-			for (int i = 0; i < icm_20948_DMP_Fsync_Detection_Bytes; i++)
-			{
-					aShort |= ((uint16_t)fifoBytes[i]) << (8 - (i * 8));
-			}
-			data->Fsync_Delay_Time = aShort;
-			fifo_count -= icm_20948_DMP_Fsync_Detection_Bytes; // Decrement the count
-			*/
+      if (fifo_count < icm_20948_DMP_Fsync_Detection_Bytes) // Check if we need to read the FIFO count again
+      {
+          result = ICM_20948_get_FIFO_count(pdev, &fifo_count);
+          if (result != ICM_20948_Stat_Ok)
+              return result;
+      }
+      if (fifo_count < icm_20948_DMP_Fsync_Detection_Bytes)
+          return ICM_20948_Stat_FIFOIncompleteData; // Bail if not enough data is available
+      aShort = 0;
+      result = ICM_20948_read_FIFO(pdev, &fifoBytes[0], icm_20948_DMP_Fsync_Detection_Bytes);
+      if (result != ICM_20948_Stat_Ok)
+          return result;
+      for (int i = 0; i < icm_20948_DMP_Fsync_Detection_Bytes; i++)
+      {
+          aShort |= ((uint16_t)fifoBytes[i]) << (8 - (i * 8));
+      }
+      data->Fsync_Delay_Time = aShort;
+      fifo_count -= icm_20948_DMP_Fsync_Detection_Bytes; // Decrement the count
+      */
   }
 
   if ((data->header2 & DMP_header2_bitmap_Pickup) > 0) // case DMP_header2_bitmap_Pickup:
@@ -2572,10 +2583,10 @@ ICM_20948_Status_e inv_icm20948_set_gyro_sf(ICM_20948_Device_t *pdev, unsigned c
     ResultLL = (MagicConstant * (long long)(1ULL << gyro_level) * (1 + div) / (1270 + pll) / MagicConstantScale);
   }
   /*
-	    In above deprecated FP version, worst case arguments can produce a result that overflows a signed long.
-	    Here, for such cases, we emulate the FP behavior of setting the result to the maximum positive value, as
-	    the compiler's conversion of a u64 to an s32 is simple truncation of the u64's high half, sadly....
-	*/
+      In above deprecated FP version, worst case arguments can produce a result that overflows a signed long.
+      Here, for such cases, we emulate the FP behavior of setting the result to the maximum positive value, as
+      the compiler's conversion of a u64 to an s32 is simple truncation of the u64's high half, sadly....
+  */
   if (ResultLL > 0x7FFFFFFF)
     gyro_sf = 0x7FFFFFFF;
   else
@@ -2589,9 +2600,7 @@ ICM_20948_Status_e inv_icm20948_set_gyro_sf(ICM_20948_Device_t *pdev, unsigned c
   gyro_sf_reg[1] = (unsigned char)(gyro_sf >> 16);
   gyro_sf_reg[2] = (unsigned char)(gyro_sf >> 8);
   gyro_sf_reg[3] = (unsigned char)(gyro_sf & 0xff);
-  result = inv_icm20948_write_mems(pdev, GYRO_SF, 4, (const unsigned char*)&gyro_sf_reg);
+  result = inv_icm20948_write_mems(pdev, GYRO_SF, 4, (const unsigned char *)&gyro_sf_reg);
 
   return result;
 }
-
-

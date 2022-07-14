@@ -29,9 +29,12 @@
 #include "DeviceConfig.h"
 #include "logging/Logger.h"
 
-namespace SlimeVR {
-    namespace Configuration {
-        class Configuration {
+namespace SlimeVR
+{
+    namespace Configuration
+    {
+        class Configuration
+        {
         public:
             void setup();
 
@@ -44,7 +47,7 @@ namespace SlimeVR {
 
             size_t getCalibrationCount() const;
             CalibrationConfig getCalibration(size_t sensorID) const;
-            void setCalibration(size_t sensorID, const CalibrationConfig& config);
+            void setCalibration(size_t sensorID, const CalibrationConfig &config);
 
         private:
             void loadCalibrations();

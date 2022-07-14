@@ -26,9 +26,12 @@
 
 #include "CalibrationConfig.h"
 
-namespace SlimeVR {
-    namespace Configuration {
-        struct DeviceConfig {
+namespace SlimeVR
+{
+    namespace Configuration
+    {
+        struct DeviceConfig
+        {
             int32_t version;
         };
     }

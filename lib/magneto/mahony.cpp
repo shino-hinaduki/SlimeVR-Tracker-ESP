@@ -29,7 +29,7 @@
 #define Kp 10.0f
 #define Ki 0.0f
 
-static float ix = 0.0f, iy = 0.0f, iz = 0.0f;  //integral feedback terms
+static float ix = 0.0f, iy = 0.0f, iz = 0.0f; // integral feedback terms
 
 // Mahony orientation filter, assumed World Frame NWU (xNorth, yWest, zUp)
 // Modified from Madgwick version to remove Z component of magnetometer:
@@ -41,8 +41,8 @@ void mahonyQuaternionUpdate(float q[4], float ax, float ay, float az, float gx, 
     // short name local variable for readability
     float q1 = q[0], q2 = q[1], q3 = q[2], q4 = q[3];
     float norm;
-    float hx, hy, hz;  //observed West vector W = AxM
-    float ux, uy, uz, wx, wy, wz; //calculated A (Up) and W in body frame
+    float hx, hy, hz;             // observed West vector W = AxM
+    float ux, uy, uz, wx, wy, wz; // calculated A (Up) and W in body frame
     float ex, ey, ez;
     float qa, qb, qc;
 
@@ -60,7 +60,8 @@ void mahonyQuaternionUpdate(float q[4], float ax, float ay, float az, float gx, 
 
     // Compute feedback only if magnetometer measurement valid (avoids NaN in magnetometer normalisation)
     float tmp = mx * mx + my * my + mz * mz;
-    if (tmp == 0.0f) {
+    if (tmp == 0.0f)
+    {
         mahonyQuaternionUpdate(q, ax, ay, az, gx, gy, gz, deltat);
         return;
     }
@@ -107,11 +108,12 @@ void mahonyQuaternionUpdate(float q[4], float ax, float ay, float az, float gx, 
         ez = (ax * uy - ay * ux) + (hx * wy - hy * wx);
 
         // Compute and apply to gyro term the integral feedback, if enabled
-        if (Ki > 0.0f) {
-            ix += Ki * ex * deltat;  // integral error scaled by Ki
+        if (Ki > 0.0f)
+        {
+            ix += Ki * ex * deltat; // integral error scaled by Ki
             iy += Ki * ey * deltat;
             iz += Ki * ez * deltat;
-            gx += ix;  // apply integral feedback
+            gx += ix; // apply integral feedback
             gy += iy;
             gz += iz;
         }
@@ -125,7 +127,7 @@ void mahonyQuaternionUpdate(float q[4], float ax, float ay, float az, float gx, 
     // Integrate rate of change of quaternion
     // small correction 1/11/2022, see https://github.com/kriswiner/MPU9250/issues/447
     deltat *= 0.5f;
-    gx *= deltat;   // pre-multiply common factors
+    gx *= deltat; // pre-multiply common factors
     gy *= deltat;
     gz *= deltat;
     qa = q1;
@@ -150,7 +152,7 @@ void mahonyQuaternionUpdate(float q[4], float ax, float ay, float az, float gx, 
     float q1 = q[0], q2 = q[1], q3 = q[2], q4 = q[3];
     float norm;
     float vx, vy, vz;
-    float ex, ey, ez;  //error terms
+    float ex, ey, ez; // error terms
     float qa, qb, qc;
 
     // Compute feedback only if accelerometer measurement valid (avoids NaN in accelerometer normalisation)
@@ -175,11 +177,12 @@ void mahonyQuaternionUpdate(float q[4], float ax, float ay, float az, float gx, 
         ez = (ax * vy - ay * vx);
 
         // Compute and apply to gyro term the integral feedback, if enabled
-        if (Ki > 0.0f) {
-            ix += Ki * ex * deltat;  // integral error scaled by Ki
+        if (Ki > 0.0f)
+        {
+            ix += Ki * ex * deltat; // integral error scaled by Ki
             iy += Ki * ey * deltat;
             iz += Ki * ez * deltat;
-            gx += ix;  // apply integral feedback
+            gx += ix; // apply integral feedback
             gy += iy;
             gz += iz;
         }
@@ -192,7 +195,7 @@ void mahonyQuaternionUpdate(float q[4], float ax, float ay, float az, float gx, 
 
     // Integrate rate of change of quaternion, q cross gyro term
     deltat *= 0.5f;
-    gx *= deltat;   // pre-multiply common factors
+    gx *= deltat; // pre-multiply common factors
     gy *= deltat;
     gz *= deltat;
     qa = q1;

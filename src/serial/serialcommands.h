@@ -24,7 +24,8 @@
 #ifndef SLIMEVR_SERIALCOMMANDS_H_
 #define SLIMEVR_SERIALCOMMANDS_H_
 
-namespace SerialCommands {
+namespace SerialCommands
+{
     void setUp();
     void update();
 }

@@ -31,7 +31,8 @@ void BNO080Sensor::motionSetup()
 #ifdef DEBUG_SENSOR
     imu.enableDebugging(Serial);
 #endif
-    if(!imu.begin(addr, Wire, m_IntPin)) {
+    if (!imu.begin(addr, Wire, m_IntPin))
+    {
         m_Logger.fatal("Can't connect to %s at address 0x%02x", getIMUNameByType(sensorType), addr);
         ledManager.pattern(50, 50, 200);
         return;
@@ -42,32 +43,31 @@ void BNO080Sensor::motionSetup()
                   "SW Version Minor: 0x%02x "
                   "SW Part Number: 0x%02x "
                   "SW Build Number: 0x%02x "
-                  "SW Version Patch: 0x%02x", 
-                  getIMUNameByType(sensorType), 
-                  addr, 
-                  imu.swMajor, 
-                  imu.swMinor, 
-                  imu.swPartNumber, 
-                  imu.swBuildNumber, 
-                  imu.swVersionPatch
-                );
+                  "SW Version Patch: 0x%02x",
+                  getIMUNameByType(sensorType),
+                  addr,
+                  imu.swMajor,
+                  imu.swMinor,
+                  imu.swPartNumber,
+                  imu.swBuildNumber,
+                  imu.swVersionPatch);
 
 #if USE_6_AXIS
-    #if (IMU == IMU_BNO085 || IMU == IMU_BNO086) && BNO_USE_ARVR_STABILIZATION
+#if (IMU == IMU_BNO085 || IMU == IMU_BNO086) && BNO_USE_ARVR_STABILIZATION
     imu.enableARVRStabilizedGameRotationVector(10);
-    #else
-    imu.enableGameRotationVector(10);
-    #endif
-
-    #if BNO_USE_MAGNETOMETER_CORRECTION
-    imu.enableRotationVector(1000);
-    #endif
 #else
-    #if (IMU == IMU_BNO085 || IMU == IMU_BNO086) && BNO_USE_ARVR_STABILIZATION
+    imu.enableGameRotationVector(10);
+#endif
+
+#if BNO_USE_MAGNETOMETER_CORRECTION
+    imu.enableRotationVector(1000);
+#endif
+#else
+#if (IMU == IMU_BNO085 || IMU == IMU_BNO086) && BNO_USE_ARVR_STABILIZATION
     imu.enableARVRStabilizedRotationVector(10);
-    #else
+#else
     imu.enableRotationVector(10);
-    #endif
+#endif
 #endif
 
     imu.enableTapDetector(100);
@@ -86,7 +86,7 @@ void BNO080Sensor::motionSetup()
 
 void BNO080Sensor::motionLoop()
 {
-    //Look for reports from the IMU
+    // Look for reports from the IMU
     while (imu.dataAvailable())
     {
 #if ENABLE_INSPECTION
@@ -119,11 +119,11 @@ void BNO080Sensor::motionLoop()
             imu.getGameQuat(quaternion.x, quaternion.y, quaternion.z, quaternion.w, calibrationAccuracy);
             quaternion *= sensorOffset;
 
-    #if ENABLE_INSPECTION
+#if ENABLE_INSPECTION
             {
                 Network::sendInspectionFusedIMUData(sensorId, quaternion);
             }
-    #endif // ENABLE_INSPECTION
+#endif // ENABLE_INSPECTION
 
             if (!OPTIMIZE_UPDATES || !lastQuatSent.equalsWithEpsilon(quaternion))
             {
@@ -132,33 +132,33 @@ void BNO080Sensor::motionLoop()
             }
         }
 
-    #if BNO_USE_MAGNETOMETER_CORRECTION
+#if BNO_USE_MAGNETOMETER_CORRECTION
         if (imu.hasNewMagQuat())
         {
             imu.getMagQuat(magQuaternion.x, magQuaternion.y, magQuaternion.z, magQuaternion.w, magneticAccuracyEstimate, magCalibrationAccuracy);
             magQuaternion *= sensorOffset;
 
-        #if ENABLE_INSPECTION
+#if ENABLE_INSPECTION
             {
                 Network::sendInspectionCorrectionData(sensorId, quaternion);
             }
-        #endif // ENABLE_INSPECTION
+#endif // ENABLE_INSPECTION
 
             newMagData = true;
         }
-    #endif // BNO_USE_MAGNETOMETER_CORRECTION
-#else // USE_6_AXIS
+#endif // BNO_USE_MAGNETOMETER_CORRECTION
+#else  // USE_6_AXIS
 
         if (imu.hasNewQuat())
         {
             imu.getQuat(quaternion.x, quaternion.y, quaternion.z, quaternion.w, magneticAccuracyEstimate, calibrationAccuracy);
             quaternion *= sensorOffset;
 
-    #if ENABLE_INSPECTION
+#if ENABLE_INSPECTION
             {
                 Network::sendInspectionFusedIMUData(sensorId, quaternion);
             }
-    #endif // ENABLE_INSPECTION
+#endif // ENABLE_INSPECTION
 
             if (!OPTIMIZE_UPDATES || !lastQuatSent.equalsWithEpsilon(quaternion))
             {
@@ -184,13 +184,14 @@ void BNO080Sensor::motionLoop()
     }
     if (lastData + 1000 < millis() && configured)
     {
-        while(true) {
+        while (true)
+        {
             BNO080Error error = imu.readError();
-            if(error.error_source == 255)
+            if (error.error_source == 255)
                 break;
             lastError = error;
             m_Logger.error("BNO08X error. Severity: %d, seq: %d, src: %d, err: %d, mod: %d, code: %d",
-                error.severity, error.error_sequence_number, error.error_source, error.error, error.error_module, error.error_code);
+                           error.severity, error.error_sequence_number, error.error_source, error.error, error.error_module, error.error_code);
         }
         statusManager.setStatus(SlimeVR::Status::IMU_ERROR, true);
         working = false;
@@ -203,12 +204,14 @@ void BNO080Sensor::motionLoop()
         }
         m_Logger.error("Sensor %d doesn't respond. Last reset reason:", sensorId, lastReset);
         m_Logger.error("Last error: %d, seq: %d, src: %d, err: %d, mod: %d, code: %d",
-                lastError.severity, lastError.error_sequence_number, lastError.error_source, lastError.error, lastError.error_module, lastError.error_code);
+                       lastError.severity, lastError.error_sequence_number, lastError.error_source, lastError.error, lastError.error_module, lastError.error_code);
     }
 }
 
-uint8_t BNO080Sensor::getSensorState() {
-    return lastReset > 0 ? SensorStatus::SENSOR_ERROR : isWorking() ? SensorStatus::SENSOR_OK : SensorStatus::SENSOR_OFFLINE;
+uint8_t BNO080Sensor::getSensorState()
+{
+    return lastReset > 0 ? SensorStatus::SENSOR_ERROR : isWorking() ? SensorStatus::SENSOR_OK
+                                                                    : SensorStatus::SENSOR_OFFLINE;
 }
 
 void BNO080Sensor::sendData()

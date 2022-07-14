@@ -29,50 +29,61 @@
 #include "batterymonitor.h"
 
 #if ESP32
-    #include "nvs_flash.h"
+#include "nvs_flash.h"
 #endif
 
-namespace SerialCommands {
+namespace SerialCommands
+{
     SlimeVR::Logging::Logger logger("SerialCommands");
 
     CmdCallback<5> cmdCallbacks;
     CmdParser cmdParser;
     CmdBuffer<64> cmdBuffer;
 
-    void cmdSet(CmdParser * parser) {
-        if(parser->getParamCount() != 1 && parser->equalCmdParam(1, "WIFI")  ) {
-            if(parser->getParamCount() < 3) {
+    void cmdSet(CmdParser *parser)
+    {
+        if (parser->getParamCount() != 1 && parser->equalCmdParam(1, "WIFI"))
+        {
+            if (parser->getParamCount() < 3)
+            {
                 logger.error("CMD SET WIFI ERROR: Too few arguments");
                 logger.info("Syntax: SET WIFI \"<SSID>\" \"<PASSWORD>\"");
-            } else {
+            }
+            else
+            {
                 WiFiNetwork::setWiFiCredentials(parser->getCmdParam(2), parser->getCmdParam(3));
                 logger.info("CMD SET WIFI OK: New wifi credentials set, reconnecting");
             }
-        } else {
+        }
+        else
+        {
             logger.error("CMD SET ERROR: Unrecognized variable to set");
         }
     }
 
-    void cmdGet(CmdParser * parser) {
-        if (parser->getParamCount() < 2) {
+    void cmdGet(CmdParser *parser)
+    {
+        if (parser->getParamCount() < 2)
+        {
             return;
         }
-        
-        if (parser->equalCmdParam(1, "INFO")) {
+
+        if (parser->equalCmdParam(1, "INFO"))
+        {
             logger.info(
                 "SlimeVR Tracker, board: %d, hardware: %d, build: %d, firmware: %s, address: %s",
                 BOARD,
                 HARDWARE_MCU,
                 FIRMWARE_BUILD_NUMBER,
                 FIRMWARE_VERSION,
-                WiFiNetwork::getAddress().toString().c_str()
-            );
+                WiFiNetwork::getAddress().toString().c_str());
             // TODO Print sensors number and types
         }
 
-        if (parser->equalCmdParam(1, "CONFIG")) {
+        if (parser->equalCmdParam(1, "CONFIG"))
+        {
             String str =
-                "BOARD=%d\n" 
+                "BOARD=%d\n"
                 "IMU=%d\n"
                 "SECOND_IMU=%d\n"
                 "IMU_ROTATION=%f\n"
@@ -106,46 +117,49 @@ namespace SerialCommands {
                 PIN_IMU_INT_2,
                 PIN_BATTERY_LEVEL,
                 LED_PIN,
-                LED_INVERTED
-            );
+                LED_INVERTED);
         }
     }
 
-    void cmdReport(CmdParser * parser) {
+    void cmdReport(CmdParser *parser)
+    {
         // TODO Health and status report
     }
 
-    void cmdReboot(CmdParser * parser) {
+    void cmdReboot(CmdParser *parser)
+    {
         logger.info("REBOOT");
         ESP.restart();
     }
 
-    void cmdFactoryReset(CmdParser * parser) {
+    void cmdFactoryReset(CmdParser *parser)
+    {
         logger.info("FACTORY RESET");
 
         configuration.reset();
 
         WiFi.disconnect(true); // Clear WiFi credentials
-        #if ESP8266
-            ESP.eraseConfig(); // Clear ESP config
-        #elif ESP32
-                nvs_flash_erase();
-        #else
-            #warning SERIAL COMMAND FACTORY RESET NOT SUPPORTED
-            logger.info("FACTORY RESET NOT SUPPORTED");
-            return;
-        #endif
+#if ESP8266
+        ESP.eraseConfig(); // Clear ESP config
+#elif ESP32
+        nvs_flash_erase();
+#else
+#warning SERIAL COMMAND FACTORY RESET NOT SUPPORTED
+        logger.info("FACTORY RESET NOT SUPPORTED");
+        return;
+#endif
 
-        #if defined(WIFI_CREDS_SSID) && defined(WIFI_CREDS_PASSWD)
-            #warning FACTORY RESET does not clear your hardcoded WiFi credentials!
-            logger.warn("FACTORY RESET does not clear your hardcoded WiFi credentials!");
-        #endif
+#if defined(WIFI_CREDS_SSID) && defined(WIFI_CREDS_PASSWD)
+#warning FACTORY RESET does not clear your hardcoded WiFi credentials!
+        logger.warn("FACTORY RESET does not clear your hardcoded WiFi credentials!");
+#endif
 
         delay(3000);
         ESP.restart();
     }
 
-    void setUp() {
+    void setUp()
+    {
         cmdCallbacks.addCmd("SET", &cmdSet);
         cmdCallbacks.addCmd("GET", &cmdGet);
         cmdCallbacks.addCmd("FRST", &cmdFactoryReset);
@@ -153,7 +167,8 @@ namespace SerialCommands {
         cmdCallbacks.addCmd("REBOOT", &cmdReboot);
     }
 
-    void update() {
+    void update()
+    {
         cmdCallbacks.updateCmdProcessing(&cmdParser, &cmdBuffer, &Serial);
     }
 }

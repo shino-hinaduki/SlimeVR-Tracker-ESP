@@ -23,10 +23,14 @@
 
 #include "CalibrationConfig.h"
 
-namespace SlimeVR {
-    namespace Configuration {
-        const char* calibrationConfigTypeToString(CalibrationConfigType type) {
-            switch (type) {
+namespace SlimeVR
+{
+    namespace Configuration
+    {
+        const char *calibrationConfigTypeToString(CalibrationConfigType type)
+        {
+            switch (type)
+            {
             case NONE:
                 return "NONE";
             case BMI160:

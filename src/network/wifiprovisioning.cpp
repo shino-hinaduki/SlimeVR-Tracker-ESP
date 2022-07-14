@@ -31,26 +31,32 @@
 SlimeVR::Logging::Logger wifiProvisioningLogger("WiFiProvisioning");
 bool provisioning = false;
 
-void WiFiNetwork::upkeepProvisioning() {
+void WiFiNetwork::upkeepProvisioning()
+{
     // Called even when not provisioning to do things like provide neighbours or other upkeep
 }
 
-void WiFiNetwork::startProvisioning() {
-    if(WiFi.beginSmartConfig()) {
+void WiFiNetwork::startProvisioning()
+{
+    if (WiFi.beginSmartConfig())
+    {
         provisioning = true;
         wifiProvisioningLogger.info("SmartConfig started");
     }
 }
 
-void WiFiNetwork::stopProvisioning() {
+void WiFiNetwork::stopProvisioning()
+{
     WiFi.stopSmartConfig();
     provisioning = false;
 }
 
-void WiFiNetwork::provideNeighbours() {
+void WiFiNetwork::provideNeighbours()
+{
     // TODO: SmartConfig can't do this, created for future
 }
 
-bool WiFiNetwork::isProvisioning() {
+bool WiFiNetwork::isProvisioning()
+{
     return provisioning && !WiFi.smartConfigDone();
 }

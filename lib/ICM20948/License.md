@@ -1,10 +1,8 @@
-SparkFun License Information
-============================
+# SparkFun License Information
 
 SparkFun uses two different licenses for our files — one for hardware and one for code.
 
-Hardware
----------
+## Hardware
 
 **SparkFun hardware is released under [Creative Commons Share-alike 4.0 International](http://creativecommons.org/licenses/by-sa/4.0/).**
 
@@ -26,9 +24,7 @@ Notices:
 You do not have to comply with the license for elements of the material in the public domain or where your use is permitted by an applicable exception or limitation.
 No warranties are given. The license may not give you all of the permissions necessary for your intended use. For example, other rights such as publicity, privacy, or moral rights may limit how you use the material.
 
-
-Code
---------
+## Code
 
 **SparkFun code, firmware, and software is released under the MIT License(http://opensource.org/licenses/MIT).**
 

@@ -37,28 +37,28 @@ constexpr float GSCALE = ((32768. / TYPICAL_SENSITIVITY_LSB) / 32768.) * (PI / 1
 // These values were calculated for 500 deg/s sensitivity
 // Step quantization - 5 degrees per step
 const float LSB_COMP_PER_TEMP_X_MAP[13] = {
-    0.77888f, 1.01376f, 0.83848f, 0.39416f,             // 15, 20, 25, 30
-    -0.08792f, -0.01576f, -0.1018f, 0.22208f,           // 35, 40, 45, 50
-    0.22208f, 0.22208f, 0.22208f, 0.2316f,              // 55, 60, 65, 70
-    0.53416f                                            // 75
+    0.77888f, 1.01376f, 0.83848f, 0.39416f,   // 15, 20, 25, 30
+    -0.08792f, -0.01576f, -0.1018f, 0.22208f, // 35, 40, 45, 50
+    0.22208f, 0.22208f, 0.22208f, 0.2316f,    // 55, 60, 65, 70
+    0.53416f                                  // 75
 };
 const float LSB_COMP_PER_TEMP_Y_MAP[13] = {
     0.10936f, 0.24392f, 0.28816f, 0.24096f,
     0.05376f, -0.1464f, -0.22664f, -0.23864f,
     -0.25064f, -0.26592f, -0.28064f, -0.30224f,
-    -0.31608f
-};
+    -0.31608f};
 const float LSB_COMP_PER_TEMP_Z_MAP[13] = {
     0.15136f, 0.04472f, 0.02528f, -0.07056f,
     0.03184f, -0.002f, -0.03888f, -0.14f,
     -0.14488f, -0.14976f, -0.15656f, -0.16108f,
-    -0.1656f
-};
+    -0.1656f};
 
-void BMI160Sensor::motionSetup() {
+void BMI160Sensor::motionSetup()
+{
     // initialize device
     imu.initialize(addr);
-    if(!imu.testConnection()) {
+    if (!imu.testConnection())
+    {
         m_Logger.fatal("Can't connect to BMI160 (reported device ID 0x%02x) at address 0x%02x", imu.getDeviceID(), addr);
         ledManager.pattern(50, 50, 200);
         return;
@@ -69,14 +69,15 @@ void BMI160Sensor::motionSetup() {
     int16_t ax, ay, az;
     imu.getAcceleration(&ax, &ay, &az);
     float g_az = (float)az / 8192; // For 4G sensitivity
-    if(g_az < -0.75f) {
+    if (g_az < -0.75f)
+    {
         ledManager.on();
 
         m_Logger.info("Flip front to confirm start calibration");
         delay(5000);
         imu.getAcceleration(&ax, &ay, &az);
         g_az = (float)az / 8192;
-        if(g_az > 0.75f)
+        if (g_az > 0.75f)
         {
             m_Logger.debug("Starting calibration...");
             startCalibration(0);
@@ -89,7 +90,8 @@ void BMI160Sensor::motionSetup() {
     {
         SlimeVR::Configuration::CalibrationConfig sensorCalibration = configuration.getCalibration(sensorId);
         // If no compatible calibration data is found, the calibration data will just be zero-ed out
-        switch (sensorCalibration.type) {
+        switch (sensorCalibration.type)
+        {
         case SlimeVR::Configuration::CalibrationConfigType::BMI160:
             m_Calibration = sensorCalibration.data.bmi160;
             break;
@@ -108,7 +110,8 @@ void BMI160Sensor::motionSetup() {
     working = true;
 }
 
-void BMI160Sensor::motionLoop() {
+void BMI160Sensor::motionLoop()
+{
 #if ENABLE_INSPECTION
     {
         int16_t rX, rY, rZ, aX, aY, aZ;
@@ -120,7 +123,7 @@ void BMI160Sensor::motionLoop() {
 #endif
 
     now = micros();
-    deltat = now - last; //seconds since last update
+    deltat = now - last; // seconds since last update
     last = now;
 
     float Gxyz[3] = {0};
@@ -146,8 +149,8 @@ void BMI160Sensor::motionLoop() {
 
 float BMI160Sensor::getTemperature()
 {
-    // Middle value is 23 degrees C (0x0000)
-    #define TEMP_ZERO 23
+// Middle value is 23 degrees C (0x0000)
+#define TEMP_ZERO 23
     // Temperature per step from -41 + 1/2^9 degrees C (0x8001) to 87 - 1/2^9 degrees C (0x7FFF)
     constexpr float TEMP_STEP = 128. / 65535;
     return (imu.getTemperature() * TEMP_STEP) + TEMP_ZERO;
@@ -183,21 +186,22 @@ void BMI160Sensor::getScaledValues(float Gxyz[3], float Axyz[3])
     Axyz[0] = (float)ax;
     Axyz[1] = (float)ay;
     Axyz[2] = (float)az;
-    //apply offsets (bias) and scale factors from Magneto
-    #if useFullCalibrationMatrix == true
-        float temp[3];
-        for (uint8_t i = 0; i < 3; i++)
-            temp[i] = (Axyz[i] - m_Calibration.A_B[i]);
-        Axyz[0] = m_Calibration.A_Ainv[0][0] * temp[0] + m_Calibration.A_Ainv[0][1] * temp[1] + m_Calibration.A_Ainv[0][2] * temp[2];
-        Axyz[1] = m_Calibration.A_Ainv[1][0] * temp[0] + m_Calibration.A_Ainv[1][1] * temp[1] + m_Calibration.A_Ainv[1][2] * temp[2];
-        Axyz[2] = m_Calibration.A_Ainv[2][0] * temp[0] + m_Calibration.A_Ainv[2][1] * temp[1] + m_Calibration.A_Ainv[2][2] * temp[2];
-    #else
-        for (uint8_t i = 0; i < 3; i++)
-            Axyz[i] = (Axyz[i] - calibration->A_B[i]);
-    #endif
+// apply offsets (bias) and scale factors from Magneto
+#if useFullCalibrationMatrix == true
+    float temp[3];
+    for (uint8_t i = 0; i < 3; i++)
+        temp[i] = (Axyz[i] - m_Calibration.A_B[i]);
+    Axyz[0] = m_Calibration.A_Ainv[0][0] * temp[0] + m_Calibration.A_Ainv[0][1] * temp[1] + m_Calibration.A_Ainv[0][2] * temp[2];
+    Axyz[1] = m_Calibration.A_Ainv[1][0] * temp[0] + m_Calibration.A_Ainv[1][1] * temp[1] + m_Calibration.A_Ainv[1][2] * temp[2];
+    Axyz[2] = m_Calibration.A_Ainv[2][0] * temp[0] + m_Calibration.A_Ainv[2][1] * temp[1] + m_Calibration.A_Ainv[2][2] * temp[2];
+#else
+    for (uint8_t i = 0; i < 3; i++)
+        Axyz[i] = (Axyz[i] - calibration->A_B[i]);
+#endif
 }
 
-void BMI160Sensor::startCalibration(int calibrationType) {
+void BMI160Sensor::startCalibration(int calibrationType)
+{
     ledManager.on();
 
     m_Logger.debug("Gathering raw data for device calibration...");
@@ -243,7 +247,7 @@ void BMI160Sensor::startCalibration(int calibrationType) {
     m_Logger.debug("Gathering accelerometer data...");
 
     uint16_t accelCalibrationSamples = 300;
-    float *calibrationDataAcc = (float*)malloc(accelCalibrationSamples * 3 * sizeof(float));
+    float *calibrationDataAcc = (float *)malloc(accelCalibrationSamples * 3 * sizeof(float));
     for (int i = 0; i < accelCalibrationSamples; i++)
     {
         ledManager.on();

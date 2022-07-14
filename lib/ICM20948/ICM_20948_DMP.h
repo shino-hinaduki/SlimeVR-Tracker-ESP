@@ -35,9 +35,9 @@ extern "C"
 // Appendix I: DMP register addresses
 
 // data output control
-#define DATA_OUT_CTL1 (4 * 16) // 16-bit: Data output control 1 register : configure DMP to output required data
-#define DATA_OUT_CTL2 (4 * 16 + 2) // 16-bit: Data output control 2 register : configure the BM, accel/gyro/compass accuracy and gesture such as Pick-up
-#define DATA_INTR_CTL (4 * 16 + 12) // 16-bit: Determines which sensors can generate interrupt according to bit map defined for DATA_OUT_CTL1
+#define DATA_OUT_CTL1 (4 * 16)        // 16-bit: Data output control 1 register : configure DMP to output required data
+#define DATA_OUT_CTL2 (4 * 16 + 2)    // 16-bit: Data output control 2 register : configure the BM, accel/gyro/compass accuracy and gesture such as Pick-up
+#define DATA_INTR_CTL (4 * 16 + 12)   // 16-bit: Determines which sensors can generate interrupt according to bit map defined for DATA_OUT_CTL1
 #define FIFO_WATERMARK (31 * 16 + 14) // 16-bit: DMP will send FIFO interrupt if FIFO count > FIFO watermark. FIFO watermark is set to 80% of actual FIFO size by default
 
 // motion event control
@@ -45,51 +45,51 @@ extern "C"
 
 // indicates to DMP which sensors are available
 /*	1: gyro samples available
-	2: accel samples available
-	8: secondary compass samples available	*/
+  2: accel samples available
+  8: secondary compass samples available	*/
 #define DATA_RDY_STATUS (8 * 16 + 10) // 16-bit: indicates to DMP which sensors are available
 
 // batch mode
-#define BM_BATCH_CNTR (27 * 16) // 32-bit: Batch counter
+#define BM_BATCH_CNTR (27 * 16)      // 32-bit: Batch counter
 #define BM_BATCH_THLD (19 * 16 + 12) // 32-bit: Batch mode threshold
 #define BM_BATCH_MASK (21 * 16 + 14) // 16-bit
 
 // sensor output data rate: all 16-bit
-#define ODR_ACCEL (11 * 16 + 14) // ODR_ACCEL Register for accel ODR
-#define ODR_GYRO (11 * 16 + 10) // ODR_GYRO Register for gyro ODR
-#define ODR_CPASS (11 * 16 + 6) // ODR_CPASS Register for compass ODR
-#define ODR_ALS (11 * 16 + 2) // ODR_ALS Register for ALS ODR
-#define ODR_QUAT6 (10 * 16 + 12) // ODR_QUAT6 Register for 6-axis quaternion ODR
-#define ODR_QUAT9 (10 * 16 + 8) // ODR_QUAT9 Register for 9-axis quaternion ODR
-#define ODR_PQUAT6 (10 * 16 + 4) // ODR_PQUAT6 Register for 6-axis pedometer quaternion ODR
-#define ODR_GEOMAG (10 * 16 + 0) // ODR_GEOMAG Register for Geomag rv ODR
-#define ODR_PRESSURE (11 * 16 + 12) // ODR_PRESSURE Register for pressure ODR
-#define ODR_GYRO_CALIBR (11 * 16 + 8) // ODR_GYRO_CALIBR Register for calibrated gyro ODR
+#define ODR_ACCEL (11 * 16 + 14)       // ODR_ACCEL Register for accel ODR
+#define ODR_GYRO (11 * 16 + 10)        // ODR_GYRO Register for gyro ODR
+#define ODR_CPASS (11 * 16 + 6)        // ODR_CPASS Register for compass ODR
+#define ODR_ALS (11 * 16 + 2)          // ODR_ALS Register for ALS ODR
+#define ODR_QUAT6 (10 * 16 + 12)       // ODR_QUAT6 Register for 6-axis quaternion ODR
+#define ODR_QUAT9 (10 * 16 + 8)        // ODR_QUAT9 Register for 9-axis quaternion ODR
+#define ODR_PQUAT6 (10 * 16 + 4)       // ODR_PQUAT6 Register for 6-axis pedometer quaternion ODR
+#define ODR_GEOMAG (10 * 16 + 0)       // ODR_GEOMAG Register for Geomag rv ODR
+#define ODR_PRESSURE (11 * 16 + 12)    // ODR_PRESSURE Register for pressure ODR
+#define ODR_GYRO_CALIBR (11 * 16 + 8)  // ODR_GYRO_CALIBR Register for calibrated gyro ODR
 #define ODR_CPASS_CALIBR (11 * 16 + 4) // ODR_CPASS_CALIBR Register for calibrated compass ODR
 
 // sensor output data rate counter: all 16-bit
-#define ODR_CNTR_ACCEL (9 * 16 + 14) // ODR_CNTR_ACCEL Register for accel ODR counter
-#define ODR_CNTR_GYRO (9 * 16 + 10) // ODR_CNTR_GYRO Register for gyro ODR counter
-#define ODR_CNTR_CPASS (9 * 16 + 6) // ODR_CNTR_CPASS Register for compass ODR counter
-#define ODR_CNTR_ALS (9 * 16 + 2) // ODR_CNTR_ALS Register for ALS ODR counter
-#define ODR_CNTR_QUAT6 (8 * 16 + 12) // ODR_CNTR_QUAT6 Register for 6-axis quaternion ODR counter
-#define ODR_CNTR_QUAT9 (8 * 16 + 8) // ODR_CNTR_QUAT9 Register for 9-axis quaternion ODR counter
-#define ODR_CNTR_PQUAT6 (8 * 16 + 4) // ODR_CNTR_PQUAT6 Register for 6-axis pedometer quaternion ODR counter
-#define ODR_CNTR_GEOMAG (8 * 16 + 0) // ODR_CNTR_GEOMAG Register for Geomag rv ODR counter
-#define ODR_CNTR_PRESSURE (9 * 16 + 12) // ODR_CNTR_PRESSURE Register for pressure ODR counter
-#define ODR_CNTR_GYRO_CALIBR (9 * 16 + 8) // ODR_CNTR_GYRO_CALIBR Register for calibrated gyro ODR counter
+#define ODR_CNTR_ACCEL (9 * 16 + 14)       // ODR_CNTR_ACCEL Register for accel ODR counter
+#define ODR_CNTR_GYRO (9 * 16 + 10)        // ODR_CNTR_GYRO Register for gyro ODR counter
+#define ODR_CNTR_CPASS (9 * 16 + 6)        // ODR_CNTR_CPASS Register for compass ODR counter
+#define ODR_CNTR_ALS (9 * 16 + 2)          // ODR_CNTR_ALS Register for ALS ODR counter
+#define ODR_CNTR_QUAT6 (8 * 16 + 12)       // ODR_CNTR_QUAT6 Register for 6-axis quaternion ODR counter
+#define ODR_CNTR_QUAT9 (8 * 16 + 8)        // ODR_CNTR_QUAT9 Register for 9-axis quaternion ODR counter
+#define ODR_CNTR_PQUAT6 (8 * 16 + 4)       // ODR_CNTR_PQUAT6 Register for 6-axis pedometer quaternion ODR counter
+#define ODR_CNTR_GEOMAG (8 * 16 + 0)       // ODR_CNTR_GEOMAG Register for Geomag rv ODR counter
+#define ODR_CNTR_PRESSURE (9 * 16 + 12)    // ODR_CNTR_PRESSURE Register for pressure ODR counter
+#define ODR_CNTR_GYRO_CALIBR (9 * 16 + 8)  // ODR_CNTR_GYRO_CALIBR Register for calibrated gyro ODR counter
 #define ODR_CNTR_CPASS_CALIBR (9 * 16 + 4) // ODR_CNTR_CPASS_CALIBR Register for calibrated compass ODR counter
 
 // mounting matrix: all 32-bit
-#define CPASS_MTX_00 (23 * 16) // Compass mount matrix and scale
-#define CPASS_MTX_01 (23 * 16 + 4) // Compass mount matrix and scale
-#define CPASS_MTX_02 (23 * 16 + 8) // Compass mount matrix and scale
+#define CPASS_MTX_00 (23 * 16)      // Compass mount matrix and scale
+#define CPASS_MTX_01 (23 * 16 + 4)  // Compass mount matrix and scale
+#define CPASS_MTX_02 (23 * 16 + 8)  // Compass mount matrix and scale
 #define CPASS_MTX_10 (23 * 16 + 12) // Compass mount matrix and scale
-#define CPASS_MTX_11 (24 * 16) // Compass mount matrix and scale
-#define CPASS_MTX_12 (24 * 16 + 4) // Compass mount matrix and scale
-#define CPASS_MTX_20 (24 * 16 + 8) // Compass mount matrix and scale
+#define CPASS_MTX_11 (24 * 16)      // Compass mount matrix and scale
+#define CPASS_MTX_12 (24 * 16 + 4)  // Compass mount matrix and scale
+#define CPASS_MTX_20 (24 * 16 + 8)  // Compass mount matrix and scale
 #define CPASS_MTX_21 (24 * 16 + 12) // Compass mount matrix and scale
-#define CPASS_MTX_22 (25 * 16) // Compass mount matrix and scale
+#define CPASS_MTX_22 (25 * 16)      // Compass mount matrix and scale
 
 // bias calibration: all 32-bit
 // The biases are 32-bits in chip frame in hardware unit scaled by:
@@ -119,7 +119,7 @@ extern "C"
 #define ACCEL_PRE_SENSOR_DATA (97 * 16 + 4)
 #define ACCEL_COVARIANCE (101 * 16 + 8)
 #define ACCEL_ALPHA_VAR (91 * 16) // 32-bit: 1026019965 (225Hz) 977872018 (112Hz) 882002213 (56Hz)
-#define ACCEL_A_VAR (92 * 16) // 32-bit: 47721859 (225Hz) 95869806 (112Hz) 191739611 (56Hz)
+#define ACCEL_A_VAR (92 * 16)     // 32-bit: 47721859 (225Hz) 95869806 (112Hz) 191739611 (56Hz)
 #define ACCEL_CAL_INIT (94 * 16 + 2)
 #define ACCEL_CAL_SCALE_COVQ_IN_RANGE (194 * 16)
 #define ACCEL_CAL_SCALE_COVQ_OUT_RANGE (195 * 16)
@@ -151,7 +151,7 @@ extern "C"
 // gains
 #define ACCEL_FB_GAIN (34 * 16)
 #define ACCEL_ONLY_GAIN (16 * 16 + 12) // 32-bit: 15252014 (225Hz) 30504029 (112Hz) 61117001 (56Hz)
-#define GYRO_SF (19 * 16) // 32-bit: gyro scaling factor
+#define GYRO_SF (19 * 16)              // 32-bit: gyro scaling factor
 
 // 9-axis
 #define MAGN_THR_9X (80 * 16)
@@ -261,7 +261,7 @@ extern "C"
 // Accel FSR
 // The DMP scales accel raw data internally to align 1g as 2^25.
 // To do this and output hardware unit again as configured FSR, write 0x4000000 to ACC_SCALE DMP register, and write 0x40000 to ACC_SCALE2 DMP register.
-#define ACC_SCALE (30 * 16 + 0) // 32-bit: Write accel scaling value for internal use
+#define ACC_SCALE (30 * 16 + 0)  // 32-bit: Write accel scaling value for internal use
 #define ACC_SCALE2 (79 * 16 + 4) // 32-bit: Write accel scaling down value
 
 // EIS authentication
@@ -304,7 +304,7 @@ extern "C"
   };
 
   /** @brief Sensor identifier for control function
- */
+   */
   enum inv_icm20948_sensor
   {
     INV_ICM20948_SENSOR_ACCELEROMETER = 0,
@@ -398,8 +398,8 @@ extern "C"
 
 // Determines which base sensor needs to be on based upon ANDROID_SENSORS 32-
 #define INV_NEEDS_ACCEL_MASK1 ((1L << 3) | (1L << 5) | (1L << 6) | (1L << 7) | (1L << 9) | (1L << 10)) // I.e. 35, 37, 38, 39, 41, 42
-#define INV_NEEDS_GYRO_MASK1 ((1L << 3) | (1L << 4) | (1L << 11)) // I.e. 35, 36, 43
-#define INV_NEEDS_COMPASS_MASK1 ((1L << 2) | (1L << 7)) // I.e. 34 and 39
+#define INV_NEEDS_GYRO_MASK1 ((1L << 3) | (1L << 4) | (1L << 11))                                      // I.e. 35, 36, 43
+#define INV_NEEDS_COMPASS_MASK1 ((1L << 2) | (1L << 7))                                                // I.e. 34 and 39
 
   enum DMP_Data_Ready_Status_Register_Bits
   {

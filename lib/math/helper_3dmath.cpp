@@ -27,7 +27,11 @@
 // Source: https://pizer.wordpress.com/2008/10/12/fast-inverse-square-root/
 float invSqrt(float x)
 {
-    union { float f; uint32_t u; } y = {x};
+    union
+    {
+        float f;
+        uint32_t u;
+    } y = {x};
     y.u = 0x5F1FFF77ul - (y.u >> 1);
     return 0.703974056f * y.f * (2.38919526f - x * y.f * y.f);
 }

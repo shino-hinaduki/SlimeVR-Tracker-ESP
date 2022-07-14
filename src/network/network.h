@@ -29,8 +29,9 @@
 #include "packets.h"
 #include "wifiprovisioning.h"
 
-namespace Network {
-    void update(Sensor * const sensor, Sensor * const sensor2);
+namespace Network
+{
+    void update(Sensor *const sensor, Sensor *const sensor2);
     void setUp();
 }
 

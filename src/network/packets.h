@@ -61,7 +61,8 @@
 #define PACKET_INSPECTION_DATATYPE_INT 1
 #define PACKET_INSPECTION_DATATYPE_FLOAT 2
 
-namespace Network {
+namespace Network
+{
     // PACKET_HEARTBEAT 0
     void sendHeartbeat();
 
@@ -69,11 +70,11 @@ namespace Network {
     void sendHandshake();
 
     // PACKET_ACCEL 4
-    void sendAccel(float* vector, uint8_t sensorId);
+    void sendAccel(float *vector, uint8_t sensorId);
 
     // PACKET_RAW_CALIBRATION_DATA 6
-    void sendRawCalibrationData(float* vector, uint8_t calibrationType, uint8_t sensorId);
-    void sendRawCalibrationData(int* vector, uint8_t calibrationType, uint8_t sensorId);
+    void sendRawCalibrationData(float *vector, uint8_t calibrationType, uint8_t sensorId);
+    void sendRawCalibrationData(int *vector, uint8_t calibrationType, uint8_t sensorId);
 
     // PACKET_CALIBRATION_FINISHED 7
     void sendCalibrationFinished(uint8_t calibrationType, uint8_t sensorId);
@@ -88,10 +89,10 @@ namespace Network {
     void sendError(uint8_t reason, uint8_t sensorId);
 
     // PACKET_SENSOR_INFO 15
-    void sendSensorInfo(Sensor * sensor);
+    void sendSensorInfo(Sensor *sensor);
 
     // PACKET_ROTATION_DATA 17
-    void sendRotationData(Quat * const quaternion, uint8_t dataType, uint8_t accuracyInfo, uint8_t sensorId);
+    void sendRotationData(Quat *const quaternion, uint8_t dataType, uint8_t accuracyInfo, uint8_t sensorId);
 
     // PACKET_MAGNETOMETER_ACCURACY 18
     void sendMagnetometerAccuracy(float accuracyInfo, uint8_t sensorId);
@@ -112,7 +113,8 @@ namespace Network {
 #endif
 }
 
-namespace DataTransfer {
+namespace DataTransfer
+{
     bool beginPacket();
     bool endPacket();
     void sendPacketType(uint8_t type);
@@ -122,9 +124,9 @@ namespace DataTransfer {
     void sendByte(uint8_t c);
     void sendInt(int i);
     void sendLong(uint64_t l);
-    void sendBytes(const uint8_t * c, size_t length);
-    void sendShortString(const char * str);
-    void sendLongString(const char * str);
+    void sendBytes(const uint8_t *c, size_t length);
+    void sendShortString(const char *str);
+    void sendLongString(const char *str);
 
     int getWriteError();
 }

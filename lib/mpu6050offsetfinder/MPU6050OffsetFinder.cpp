@@ -41,26 +41,26 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
-  If an MPU6050 
-      * is an ideal member of its tribe, 
-      * is properly warmed up, 
-      * is at rest in a neutral position, 
-      * is in a location where the pull of gravity is exactly 1g, and 
-      * has been loaded with the best possible offsets, 
-then it will report 0 for all accelerations and displacements, except for 
-Z acceleration, for which it will report 16384 (that is, 2^14).  Your device 
-probably won't do quite this well, but good offsets will all get the baseline 
+  If an MPU6050
+      * is an ideal member of its tribe,
+      * is properly warmed up,
+      * is at rest in a neutral position,
+      * is in a location where the pull of gravity is exactly 1g, and
+      * has been loaded with the best possible offsets,
+then it will report 0 for all accelerations and displacements, except for
+Z acceleration, for which it will report 16384 (that is, 2^14).  Your device
+probably won't do quite this well, but good offsets will all get the baseline
 outputs close to these target values.
 
-  Put the MPU6050 on a flat and horizontal surface, and leave it operating for 
+  Put the MPU6050 on a flat and horizontal surface, and leave it operating for
 5-10 minutes so its temperature gets stabilized.
 
   Run this program.  A "----- done -----" line will indicate that it has done its best.
-With the current accuracy-related constants (NFast = 1000, NSlow = 10000), it will take 
+With the current accuracy-related constants (NFast = 1000, NSlow = 10000), it will take
 a few minutes to get there.
 
-  Along the way, it will generate a dozen or so lines of output, showing that for each 
-of the 6 desired offsets, it is 
+  Along the way, it will generate a dozen or so lines of output, showing that for each
+of the 6 desired offsets, it is
       * first, trying to find two estimates, one too low and one too high, and
       * then, closing in until the bracket can't be made smaller.
 
@@ -69,7 +69,7 @@ of the 6 desired offsets, it is
 As will have been shown in interspersed header lines, the six groups making up this
 line describe the optimum offsets for the X acceleration, Y acceleration, Z acceleration,
 X gyro, Y gyro, and Z gyro, respectively.  In the sample shown just above, the trial showed
-that +567 was the best offset for the X acceleration, -2223 was best for Y acceleration, 
+that +567 was the best offset for the X acceleration, -2223 was best for Y acceleration,
 and so on.
 
   The need for the delay between readings (usDelay) was brought to my attention by Nikolaus Doppelhammer.
@@ -155,15 +155,15 @@ void Initialize(MPU9250 &mpu9250)
 {
     accelgyro = mpu9250;
     Serial.println("PID tuning Each Dot = 100 readings");
-    /*A tidbit on how PID (PI actually) tuning works. 
-    When we change the offset in the MPU6050 we can get instant results. This allows us to use Proportional and 
-    integral of the PID to discover the ideal offsets. Integral is the key to discovering these offsets, Integral 
-    uses the error from set-point (set-point is zero), it takes a fraction of this error (error * ki) and adds it 
-    to the integral value. Each reading narrows the error down to the desired offset. The greater the error from 
-    set-point, the more we adjust the integral value. The proportional does its part by hiding the noise from the 
-    integral math. The Derivative is not used because of the noise and because the sensor is stationary. With the 
-    noise removed the integral value lands on a solid offset after just 600 readings. At the end of each set of 100 
-    readings, the integral value is used for the actual offsets and the last proportional reading is ignored due to 
+    /*A tidbit on how PID (PI actually) tuning works.
+    When we change the offset in the MPU6050 we can get instant results. This allows us to use Proportional and
+    integral of the PID to discover the ideal offsets. Integral is the key to discovering these offsets, Integral
+    uses the error from set-point (set-point is zero), it takes a fraction of this error (error * ki) and adds it
+    to the integral value. Each reading narrows the error down to the desired offset. The greater the error from
+    set-point, the more we adjust the integral value. The proportional does its part by hiding the noise from the
+    integral math. The Derivative is not used because of the noise and because the sensor is stationary. With the
+    noise removed the integral value lands on a solid offset after just 600 readings. At the end of each set of 100
+    readings, the integral value is used for the actual offsets and the last proportional reading is ignored due to
     the fact it reacts to any noise.
   */
     accelgyro.CalibrateAccel(6);

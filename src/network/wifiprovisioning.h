@@ -23,7 +23,8 @@
 #ifndef SLIMEVR_WIFIPROVISIONING_H_
 #define SLIMEVR_WIFIPROVISIONING_H_
 
-namespace WiFiNetwork {
+namespace WiFiNetwork
+{
     void upkeepProvisioning();
     void startProvisioning();
     void stopProvisioning();

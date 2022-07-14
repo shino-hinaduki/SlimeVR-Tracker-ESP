@@ -57,10 +57,12 @@ public:
     {
         return working;
     };
-    uint8_t getSensorId() {
+    uint8_t getSensorId()
+    {
         return sensorId;
     };
-    uint8_t getSensorType() {
+    uint8_t getSensorType()
+    {
         return sensorType;
     };
 
@@ -80,13 +82,13 @@ protected:
     SlimeVR::Logging::Logger m_Logger;
 };
 
-const char * getIMUNameByType(int imuType);
+const char *getIMUNameByType(int imuType);
 
-enum SensorStatus {
+enum SensorStatus
+{
     SENSOR_OFFLINE = 0,
     SENSOR_OK = 1,
     SENSOR_ERROR = 2
 };
-
 
 #endif // SLIMEVR_SENSOR_H_

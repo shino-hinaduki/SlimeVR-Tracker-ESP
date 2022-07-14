@@ -38,7 +38,8 @@
 #define NUM_BNO055_OFFSET_REGISTERS (22)
 
 /** A structure to represent offsets **/
-typedef struct {
+typedef struct
+{
   int16_t accel_offset_x; /**< x acceleration offset */
   int16_t accel_offset_y; /**< y acceleration offset */
   int16_t accel_offset_z; /**< z acceleration offset */
@@ -60,10 +61,12 @@ typedef struct {
  *  @brief  Class that stores state and functions for interacting with
  *          BNO055 Sensor
  */
-class Adafruit_BNO055 {
+class Adafruit_BNO055
+{
 public:
   /** BNO055 Registers **/
-  typedef enum {
+  typedef enum
+  {
     /* Page id register definition */
     BNO055_PAGE_ID_ADDR = 0X07,
 
@@ -213,14 +216,16 @@ public:
   } adafruit_bno055_reg_t;
 
   /** BNO055 power settings */
-  typedef enum {
+  typedef enum
+  {
     POWER_MODE_NORMAL = 0X00,
     POWER_MODE_LOWPOWER = 0X01,
     POWER_MODE_SUSPEND = 0X02
   } adafruit_bno055_powermode_t;
 
   /** Operation mode settings **/
-  typedef enum {
+  typedef enum
+  {
     OPERATION_MODE_CONFIG = 0X00,
     OPERATION_MODE_ACCONLY = 0X01,
     OPERATION_MODE_MAGONLY = 0X02,
@@ -237,7 +242,8 @@ public:
   } adafruit_bno055_opmode_t;
 
   /** Remap settings **/
-  typedef enum {
+  typedef enum
+  {
     REMAP_CONFIG_P0 = 0x21,
     REMAP_CONFIG_P1 = 0x24, // default
     REMAP_CONFIG_P2 = 0x24,
@@ -249,7 +255,8 @@ public:
   } adafruit_bno055_axis_remap_config_t;
 
   /** Remap Signs **/
-  typedef enum {
+  typedef enum
+  {
     REMAP_SIGN_P0 = 0x04,
     REMAP_SIGN_P1 = 0x00, // default
     REMAP_SIGN_P2 = 0x06,
@@ -261,7 +268,8 @@ public:
   } adafruit_bno055_axis_remap_sign_t;
 
   /** A structure to represent revisions **/
-  typedef struct {
+  typedef struct
+  {
     uint8_t accel_rev; /**< acceleration rev */
     uint8_t mag_rev;   /**< magnetometer rev */
     uint8_t gyro_rev;  /**< gyroscrope rev */
@@ -270,7 +278,8 @@ public:
   } adafruit_bno055_rev_info_t;
 
   /** Vector Mappings **/
-  typedef enum {
+  typedef enum
+  {
     VECTOR_ACCELEROMETER = BNO055_ACCEL_DATA_X_LSB_ADDR,
     VECTOR_MAGNETOMETER = BNO055_MAG_DATA_X_LSB_ADDR,
     VECTOR_GYROSCOPE = BNO055_GYRO_DATA_X_LSB_ADDR,

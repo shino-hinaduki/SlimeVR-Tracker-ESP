@@ -23,6 +23,7 @@ copy-paste code from random libraries! There are several reasons for this:
   from the original!
 
 Instead, we will want to do the following:
+
 1. Check that the dependency has a permissive license.
 1. (Optional) Fork the dependency if it needs any modification.
 1. Add the dependency via PlatformIO.
@@ -35,14 +36,16 @@ viral software licenses. If you do not know what that means, here is a breakdown
 common software licenses:
 
 > Fine to use:
-> * MIT
-> * Apache 2.0
-> * BSD
+>
+> - MIT
+> - Apache 2.0
+> - BSD
 >
 > Will not be accepted:
-> * GPLv3 or v2
-> * LGPL
-> * No license
+>
+> - GPLv3 or v2
+> - LGPL
+> - No license
 
 This includes the license of any code that your dependency depends on! If you are ever
 unsure, feel free to ask us in our Discord.
@@ -50,7 +53,7 @@ unsure, feel free to ask us in our Discord.
 ### (Optional) Fork the dependency
 
 When you want to use the depdendency, you should ask yourself: "Can I simply call the
-functions/classes in the dependency from *my* code, or do I actually need to modify the
+functions/classes in the dependency from _my_ code, or do I actually need to modify the
 source code of the original files"? If the answer is "I need to modify the original
 files", then you will need to fork the dependency so that your modifications are clear.
 
@@ -69,11 +72,10 @@ original when you commit those changes.
 We will likely ask you to transfer ownership of the fork to the SlimeVR organization if
 your PR is going to be merged.
 
-
 ### Adding the dependency
 
-PlatformIO provides us a helpful way to do dependency management. 
-Here we provide the basic workflow you can follow, but you can refer to the 
+PlatformIO provides us a helpful way to do dependency management.
+Here we provide the basic workflow you can follow, but you can refer to the
 [PlatformIO documentation on dependecies][dep docs] for more details.
 
 [dep docs]: https://docs.platformio.org/en/latest/librarymanager/dependencies.html
@@ -99,18 +101,19 @@ lib_deps=
 ```
 
 In order, these dependencies do the following:
+
 1. Adds a dependency on version `6.9.12` of the
-  [ArduinoJson](https://registry.platformio.org/libraries/bblanchon/ArduinoJson)
-  library by `bblanchon`. This library was uploaded to the PlatformIO
-  [package registry](https://registry.platformio.org/search) which contains many popular
-  libraries intended for use with PlatformIO.
+   [ArduinoJson](https://registry.platformio.org/libraries/bblanchon/ArduinoJson)
+   library by `bblanchon`. This library was uploaded to the PlatformIO
+   [package registry](https://registry.platformio.org/search) which contains many popular
+   libraries intended for use with PlatformIO.
 1. Adds a dependency to a Git repo located at `https://github.com/Some/Dependency` and
-  uses the commit tagged as `v1.2.3`. This could also have been a branch name, or a
-  commit hash.
+   uses the commit tagged as `v1.2.3`. This could also have been a branch name, or a
+   commit hash.
 1. Links to a folder locally on your computer with the path `C:/path/to/the/library`.
-  This is useful when testing your code locally where you want to make changes in your
-  fork (which is checked out at that path), but you don't want to have to constantly
-  commit and push to your fork just to get the changes usable by the firmware.
+   This is useful when testing your code locally where you want to make changes in your
+   fork (which is checked out at that path), but you don't want to have to constantly
+   commit and push to your fork just to get the changes usable by the firmware.
 
 > **Note**
 > If you have forked the dependency instead of using it as-is, we recommend using the

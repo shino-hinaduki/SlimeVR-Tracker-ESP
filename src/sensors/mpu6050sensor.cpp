@@ -51,7 +51,8 @@ void MPU6050Sensor::motionSetup()
     {
         SlimeVR::Configuration::CalibrationConfig sensorCalibration = configuration.getCalibration(sensorId);
         // If no compatible calibration data is found, the calibration data will just be zero-ed out
-        switch (sensorCalibration.type) {
+        switch (sensorCalibration.type)
+        {
         case SlimeVR::Configuration::CalibrationConfigType::MPU6050:
             m_Calibration = sensorCalibration.data.mpu6050;
             break;
@@ -149,7 +150,8 @@ void MPU6050Sensor::motionLoop()
     }
 }
 
-void MPU6050Sensor::startCalibration(int calibrationType) {
+void MPU6050Sensor::startCalibration(int calibrationType)
+{
     ledManager.on();
 
 #ifdef IMU_MPU6050_RUNTIME_CALIBRATION
@@ -162,10 +164,10 @@ void MPU6050Sensor::startCalibration(int calibrationType) {
         Network::sendCalibrationFinished(CALIBRATION_TYPE_INTERNAL_ACCEL, 0);
         break;
     case CALIBRATION_TYPE_INTERNAL_GYRO:
-        Network::sendCalibrationFinished(CALIBRATION_TYPE_INTERNAL_GYRO, 0);//was CALIBRATION_TYPE_INTERNAL_GYRO for some reason? there wasn't a point to this switch
+        Network::sendCalibrationFinished(CALIBRATION_TYPE_INTERNAL_GYRO, 0); // was CALIBRATION_TYPE_INTERNAL_GYRO for some reason? there wasn't a point to this switch
         break;
     }
-#else //!IMU_MPU6050_RUNTIME_CALIBRATION
+#else  //! IMU_MPU6050_RUNTIME_CALIBRATION
     m_Logger.info("Put down the device and wait for baseline gyro reading calibration");
     delay(2000);
 
@@ -180,14 +182,14 @@ void MPU6050Sensor::startCalibration(int calibrationType) {
     {
     case CALIBRATION_TYPE_INTERNAL_ACCEL:
         imu.CalibrateAccel(10);
-        Network::sendCalibrationFinished(CALIBRATION_TYPE_INTERNAL_ACCEL, 0);//doesn't send calibration data anymore, has that been depricated in server?
+        Network::sendCalibrationFinished(CALIBRATION_TYPE_INTERNAL_ACCEL, 0); // doesn't send calibration data anymore, has that been depricated in server?
         m_Calibration.A_B[0] = imu.getXAccelOffset();
         m_Calibration.A_B[1] = imu.getYAccelOffset();
         m_Calibration.A_B[2] = imu.getZAccelOffset();
         break;
     case CALIBRATION_TYPE_INTERNAL_GYRO:
         imu.CalibrateGyro(10);
-        Network::sendCalibrationFinished(CALIBRATION_TYPE_INTERNAL_GYRO, 0);//doesn't send calibration data anymore
+        Network::sendCalibrationFinished(CALIBRATION_TYPE_INTERNAL_GYRO, 0); // doesn't send calibration data anymore
         m_Calibration.G_off[0] = imu.getXGyroOffset();
         m_Calibration.G_off[1] = imu.getYGyroOffset();
         m_Calibration.G_off[2] = imu.getZGyroOffset();

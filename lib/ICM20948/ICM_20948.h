@@ -20,8 +20,8 @@ A C++ interface to the ICM-20948
 class ICM_20948
 {
 private:
-  Stream *_debugSerial;     //The stream to send debug messages to if enabled
-  bool _printDebug = false; //Flag to print the serial commands we are sending to the Serial port for debug
+  Stream *_debugSerial;     // The stream to send debug messages to if enabled
+  bool _printDebug = false; // Flag to print the serial commands we are sending to the Serial port for debug
 
   const uint8_t MAX_MAGNETOMETER_STARTS = 10; // This replaces maxTries
 
@@ -40,25 +40,25 @@ public:
 // Boards like the RedBoard Turbo use SerialUSB (not Serial).
 // But other boards like the SAMD51 Thing Plus use Serial (not SerialUSB).
 // These lines let the code compile cleanly on as many SAMD boards as possible.
-#if defined(ARDUINO_ARCH_SAMD) // Is this a SAMD board?
-#if defined(USB_VID) // Is the USB Vendor ID defined?
-#if (USB_VID == 0x1B4F) // Is this a SparkFun board?
+#if defined(ARDUINO_ARCH_SAMD)                                              // Is this a SAMD board?
+#if defined(USB_VID)                                                        // Is the USB Vendor ID defined?
+#if (USB_VID == 0x1B4F)                                                     // Is this a SparkFun board?
 #if !defined(ARDUINO_SAMD51_THING_PLUS) & !defined(ARDUINO_SAMD51_MICROMOD) // If it is not a SAMD51 Thing Plus or SAMD51 MicroMod
-  void enableDebugging(Stream &debugPort = SerialUSB); //Given a port to print to, enable debug messages.
+  void enableDebugging(Stream &debugPort = SerialUSB);                      // Given a port to print to, enable debug messages.
 #else
-  void enableDebugging(Stream &debugPort = Serial); //Given a port to print to, enable debug messages.
+  void enableDebugging(Stream &debugPort = Serial); // Given a port to print to, enable debug messages.
 #endif
 #else
-  void enableDebugging(Stream &debugPort = Serial); //Given a port to print to, enable debug messages.
+  void enableDebugging(Stream &debugPort = Serial); // Given a port to print to, enable debug messages.
 #endif
 #else
-  void enableDebugging(Stream &debugPort = Serial); //Given a port to print to, enable debug messages.
+  void enableDebugging(Stream &debugPort = Serial); // Given a port to print to, enable debug messages.
 #endif
 #else
-  void enableDebugging(Stream &debugPort = Serial); //Given a port to print to, enable debug messages.
+  void enableDebugging(Stream &debugPort = Serial); // Given a port to print to, enable debug messages.
 #endif
 
-  void disableDebugging(void); //Turn off debug statements
+  void disableDebugging(void); // Turn off debug statements
 
   void debugPrintStatus(ICM_20948_Status_e stat);
 
@@ -137,16 +137,16 @@ public:
   ICM_20948_Status_e i2cMasterEnable(bool enable = true);
   ICM_20948_Status_e i2cMasterReset();
 
-  //Used for configuring peripherals 0-3
+  // Used for configuring peripherals 0-3
   ICM_20948_Status_e i2cControllerConfigurePeripheral(uint8_t peripheral, uint8_t addr, uint8_t reg, uint8_t len, bool Rw = true, bool enable = true, bool data_only = false, bool grp = false, bool swap = false, uint8_t dataOut = 0);
   ICM_20948_Status_e i2cControllerPeriph4Transaction(uint8_t addr, uint8_t reg, uint8_t *data, uint8_t len, bool Rw, bool send_reg_addr = true);
 
-  //Provided for backward-compatibility only. Please update to i2cControllerConfigurePeripheral and i2cControllerPeriph4Transaction.
-  //https://www.oshwa.org/2020/06/29/a-resolution-to-redefine-spi-pin-names/
+  // Provided for backward-compatibility only. Please update to i2cControllerConfigurePeripheral and i2cControllerPeriph4Transaction.
+  // https://www.oshwa.org/2020/06/29/a-resolution-to-redefine-spi-pin-names/
   ICM_20948_Status_e i2cMasterConfigureSlave(uint8_t peripheral, uint8_t addr, uint8_t reg, uint8_t len, bool Rw = true, bool enable = true, bool data_only = false, bool grp = false, bool swap = false);
   ICM_20948_Status_e i2cMasterSLV4Transaction(uint8_t addr, uint8_t reg, uint8_t *data, uint8_t len, bool Rw, bool send_reg_addr = true);
 
-  //Used for configuring the Magnetometer
+  // Used for configuring the Magnetometer
   ICM_20948_Status_e i2cMasterSingleW(uint8_t addr, uint8_t reg, uint8_t data);
   uint8_t i2cMasterSingleR(uint8_t addr, uint8_t reg);
 
@@ -157,43 +157,43 @@ public:
   ICM_20948_Status_e read(uint8_t reg, uint8_t *pdata, uint32_t len);
   ICM_20948_Status_e write(uint8_t reg, uint8_t *pdata, uint32_t len);
 
-  //Mag specific
+  // Mag specific
   ICM_20948_Status_e startupMagnetometer(bool minimal = false); // If minimal is true, several startup steps are skipped. The mag then needs to be set up manually for the DMP.
   ICM_20948_Status_e magWhoIAm(void);
   uint8_t readMag(AK09916_Reg_Addr_e reg);
   ICM_20948_Status_e writeMag(AK09916_Reg_Addr_e reg, uint8_t *pdata);
   ICM_20948_Status_e resetMag();
 
-  //FIFO
+  // FIFO
   ICM_20948_Status_e enableFIFO(bool enable = true);
   ICM_20948_Status_e resetFIFO(void);
   ICM_20948_Status_e setFIFOmode(bool snapshot = false); // Default to Stream (non-Snapshot) mode
   ICM_20948_Status_e getFIFOcount(uint16_t *count);
   ICM_20948_Status_e readFIFO(uint8_t *data, uint8_t len = 1);
 
-  //DMP
+  // DMP
 
-  //Gyro Bias
-  ICM_20948_Status_e SetBiasGyroX( int32_t newValue);
-  ICM_20948_Status_e SetBiasGyroY( int32_t newValue);
-  ICM_20948_Status_e SetBiasGyroZ( int32_t newValue);
-  ICM_20948_Status_e GetBiasGyroX( int32_t* bias);
-  ICM_20948_Status_e GetBiasGyroY( int32_t* bias);
-  ICM_20948_Status_e GetBiasGyroZ( int32_t* bias);
-  //Accel Bias
-  ICM_20948_Status_e SetBiasAccelX( int32_t newValue);
-  ICM_20948_Status_e SetBiasAccelY( int32_t newValue);
-  ICM_20948_Status_e SetBiasAccelZ( int32_t newValue);
-  ICM_20948_Status_e GetBiasAccelX( int32_t* bias);
-  ICM_20948_Status_e GetBiasAccelY( int32_t* bias);
-  ICM_20948_Status_e GetBiasAccelZ( int32_t* bias);
-  //CPass Bias
-  ICM_20948_Status_e SetBiasCPassX( int32_t newValue);
-  ICM_20948_Status_e SetBiasCPassY( int32_t newValue);
-  ICM_20948_Status_e SetBiasCPassZ( int32_t newValue);
-  ICM_20948_Status_e GetBiasCPassX( int32_t* bias);
-  ICM_20948_Status_e GetBiasCPassY( int32_t* bias);
-  ICM_20948_Status_e GetBiasCPassZ( int32_t* bias);
+  // Gyro Bias
+  ICM_20948_Status_e SetBiasGyroX(int32_t newValue);
+  ICM_20948_Status_e SetBiasGyroY(int32_t newValue);
+  ICM_20948_Status_e SetBiasGyroZ(int32_t newValue);
+  ICM_20948_Status_e GetBiasGyroX(int32_t *bias);
+  ICM_20948_Status_e GetBiasGyroY(int32_t *bias);
+  ICM_20948_Status_e GetBiasGyroZ(int32_t *bias);
+  // Accel Bias
+  ICM_20948_Status_e SetBiasAccelX(int32_t newValue);
+  ICM_20948_Status_e SetBiasAccelY(int32_t newValue);
+  ICM_20948_Status_e SetBiasAccelZ(int32_t newValue);
+  ICM_20948_Status_e GetBiasAccelX(int32_t *bias);
+  ICM_20948_Status_e GetBiasAccelY(int32_t *bias);
+  ICM_20948_Status_e GetBiasAccelZ(int32_t *bias);
+  // CPass Bias
+  ICM_20948_Status_e SetBiasCPassX(int32_t newValue);
+  ICM_20948_Status_e SetBiasCPassY(int32_t newValue);
+  ICM_20948_Status_e SetBiasCPassZ(int32_t newValue);
+  ICM_20948_Status_e GetBiasCPassX(int32_t *bias);
+  ICM_20948_Status_e GetBiasCPassY(int32_t *bias);
+  ICM_20948_Status_e GetBiasCPassZ(int32_t *bias);
 
   // Done:
   //  Configure DMP start address through PRGM_STRT_ADDRH/PRGM_STRT_ADDRL
@@ -240,8 +240,8 @@ public:
 // I2C
 
 // Forward declarations of TwoWire and Wire for board/variant combinations that don't have a default 'SPI'
-//class TwoWire; // Commented by PaulZC 21/2/8 - this was causing compilation to fail on the Arduino NANO 33 BLE
-//extern TwoWire Wire; // Commented by PaulZC 21/2/8 - this was causing compilation to fail on the Arduino NANO 33 BLE
+// class TwoWire; // Commented by PaulZC 21/2/8 - this was causing compilation to fail on the Arduino NANO 33 BLE
+// extern TwoWire Wire; // Commented by PaulZC 21/2/8 - this was causing compilation to fail on the Arduino NANO 33 BLE
 
 class ICM_20948_I2C : public ICM_20948
 {
@@ -265,8 +265,8 @@ public:
 #define ICM_20948_SPI_DEFAULT_MODE SPI_MODE0
 
 // Forward declarations of SPIClass and SPI for board/variant combinations that don't have a default 'SPI'
-//class SPIClass; // Commented by PaulZC 21/2/8 - this was causing compilation to fail on the Arduino NANO 33 BLE
-//extern SPIClass SPI; // Commented by PaulZC 21/2/8 - this was causing compilation to fail on the Arduino NANO 33 BLE
+// class SPIClass; // Commented by PaulZC 21/2/8 - this was causing compilation to fail on the Arduino NANO 33 BLE
+// extern SPIClass SPI; // Commented by PaulZC 21/2/8 - this was causing compilation to fail on the Arduino NANO 33 BLE
 
 class ICM_20948_SPI : public ICM_20948
 {

@@ -30,9 +30,10 @@
 #include "wifihandler.h"
 #include "globals.h"
 
-namespace ServerConnection {
+namespace ServerConnection
+{
     void connect();
-    void update(Sensor * const sensor, Sensor * const sensor2);
+    void update(Sensor *const sensor, Sensor *const sensor2);
     void resetConnection();
     bool isConnected();
 }

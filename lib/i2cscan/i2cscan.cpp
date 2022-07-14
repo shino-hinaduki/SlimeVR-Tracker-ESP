@@ -11,14 +11,19 @@ String portMap[] = {"4", "13", "14", "15", "16", "17", "18", "19", "21", "22", "
 namespace I2CSCAN
 {
 
-    uint8_t pickDevice(uint8_t addr1, uint8_t addr2, bool scanIfNotFound) {
-        if(I2CSCAN::isI2CExist(addr1))
+    uint8_t pickDevice(uint8_t addr1, uint8_t addr2, bool scanIfNotFound)
+    {
+        if (I2CSCAN::isI2CExist(addr1))
             return addr1;
-        if(!I2CSCAN::isI2CExist(addr2)) {
-            if(scanIfNotFound) {
+        if (!I2CSCAN::isI2CExist(addr2))
+        {
+            if (scanIfNotFound)
+            {
                 Serial.println("[ERR] I2C: Can't find I2C device on provided addresses, scanning for all I2C devices and returning");
                 I2CSCAN::scani2cports();
-            } else {
+            }
+            else
+            {
                 Serial.println("[ERR] I2C: Can't find I2C device on provided addresses");
             }
             return 0;
@@ -35,12 +40,13 @@ namespace I2CSCAN
             {
                 if (i != j)
                 {
-                    if(checkI2C(i, j))
+                    if (checkI2C(i, j))
                         found = true;
                 }
             }
         }
-        if(!found) {
+        if (!found)
+        {
             Serial.println("[ERR] I2C: No I2C devices found");
         }
     }
@@ -84,10 +90,11 @@ namespace I2CSCAN
         return found;
     }
 
-    bool isI2CExist(uint8_t addr) {
+    bool isI2CExist(uint8_t addr)
+    {
         Wire.beginTransmission(addr);
         byte error = Wire.endTransmission();
-        if(error == 0)
+        if (error == 0)
             return true;
         return false;
     }
@@ -107,59 +114,65 @@ namespace I2CSCAN
      * NSW Australia, www.forward.com.au
      * This code may be freely used for both private and commerical use
      */
-    int clearBus(uint8_t SDA, uint8_t SCL) {
-        #if defined(TWCR) && defined(TWEN)
-        TWCR &= ~(_BV(TWEN)); //Disable the Atmel 2-Wire interface so we can control the SDA and SCL pins directly
-        #endif
+    int clearBus(uint8_t SDA, uint8_t SCL)
+    {
+#if defined(TWCR) && defined(TWEN)
+        TWCR &= ~(_BV(TWEN)); // Disable the Atmel 2-Wire interface so we can control the SDA and SCL pins directly
+#endif
 
         pinMode(SDA, INPUT_PULLUP); // Make SDA (data) and SCL (clock) pins Inputs with pullup.
         pinMode(SCL, INPUT_PULLUP);
 
         boolean SCL_LOW = (digitalRead(SCL) == LOW); // Check is SCL is Low.
-        if (SCL_LOW) { //If it is held low Arduno cannot become the I2C master. 
-            return 1; //I2C bus error. Could not clear SCL clock line held low
+        if (SCL_LOW)
+        {             // If it is held low Arduno cannot become the I2C master.
+            return 1; // I2C bus error. Could not clear SCL clock line held low
         }
 
-        boolean SDA_LOW = (digitalRead(SDA) == LOW);  // vi. Check SDA input.
-        int clockCount = 20; // > 2x9 clock
+        boolean SDA_LOW = (digitalRead(SDA) == LOW); // vi. Check SDA input.
+        int clockCount = 20;                         // > 2x9 clock
 
-        while (SDA_LOW && (clockCount > 0)) { //  vii. If SDA is Low,
+        while (SDA_LOW && (clockCount > 0))
+        { //  vii. If SDA is Low,
             clockCount--;
-        // Note: I2C bus is open collector so do NOT drive SCL or SDA high.
-            pinMode(SCL, INPUT); // release SCL pullup so that when made output it will be LOW
-            pinMode(SCL, OUTPUT); // then clock SCL Low
-            delayMicroseconds(10); //  for >5uS
-            pinMode(SCL, INPUT); // release SCL LOW
+            // Note: I2C bus is open collector so do NOT drive SCL or SDA high.
+            pinMode(SCL, INPUT);        // release SCL pullup so that when made output it will be LOW
+            pinMode(SCL, OUTPUT);       // then clock SCL Low
+            delayMicroseconds(10);      //  for >5uS
+            pinMode(SCL, INPUT);        // release SCL LOW
             pinMode(SCL, INPUT_PULLUP); // turn on pullup resistors again
             // do not force high as slave may be holding it low for clock stretching.
             delayMicroseconds(10); //  for >5uS
             // The >5uS is so that even the slowest I2C devices are handled.
             SCL_LOW = (digitalRead(SCL) == LOW); // Check if SCL is Low.
             int counter = 20;
-            while (SCL_LOW && (counter > 0)) {  //  loop waiting for SCL to become High only wait 2sec.
-            counter--;
-            delay(100);
-            SCL_LOW = (digitalRead(SCL) == LOW);
+            while (SCL_LOW && (counter > 0))
+            { //  loop waiting for SCL to become High only wait 2sec.
+                counter--;
+                delay(100);
+                SCL_LOW = (digitalRead(SCL) == LOW);
             }
-            if (SCL_LOW) { // still low after 2 sec error
-            return 2; // I2C bus error. Could not clear. SCL clock line held low by slave clock stretch for >2sec
+            if (SCL_LOW)
+            {             // still low after 2 sec error
+                return 2; // I2C bus error. Could not clear. SCL clock line held low by slave clock stretch for >2sec
             }
             SDA_LOW = (digitalRead(SDA) == LOW); //   and check SDA input again and loop
         }
-        if (SDA_LOW) { // still low
+        if (SDA_LOW)
+        {             // still low
             return 3; // I2C bus error. Could not clear. SDA data line held low
         }
 
         // else pull SDA line low for Start or Repeated Start
-        pinMode(SDA, INPUT); // remove pullup.
-        pinMode(SDA, OUTPUT);  // and then make it LOW i.e. send an I2C Start or Repeated start control.
+        pinMode(SDA, INPUT);  // remove pullup.
+        pinMode(SDA, OUTPUT); // and then make it LOW i.e. send an I2C Start or Repeated start control.
         // When there is only one I2C master a Start or Repeat Start has the same function as a Stop and clears the bus.
         /// A Repeat Start is a Start occurring after a Start with no intervening Stop.
-        delayMicroseconds(10); // wait >5uS
-        pinMode(SDA, INPUT); // remove output low
+        delayMicroseconds(10);      // wait >5uS
+        pinMode(SDA, INPUT);        // remove output low
         pinMode(SDA, INPUT_PULLUP); // and make SDA high i.e. send I2C STOP control.
-        delayMicroseconds(10); // x. wait >5uS
-        pinMode(SDA, INPUT); // and reset pins as tri-state inputs which is the default state on reset
+        delayMicroseconds(10);      // x. wait >5uS
+        pinMode(SDA, INPUT);        // and reset pins as tri-state inputs which is the default state on reset
         pinMode(SCL, INPUT);
         return 0; // all ok
     }
