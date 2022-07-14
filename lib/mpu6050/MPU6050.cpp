@@ -75,7 +75,8 @@ bool MPU6050::testConnection()
     // 0x71 -> MPU-9250
     // 0x73 -> MPU-9255
     // 0x74 -> MPU-6515
-    return deviceId == 0x68 || deviceId == 0x70 || deviceId == 0x71 || deviceId == 0x73 || deviceId == 0x74;
+    // 0x19 -> MPU-6886
+    return deviceId == 0x68 || deviceId == 0x70 || deviceId == 0x71 || deviceId == 0x73 || deviceId == 0x74 || deviceId == 0x19;
 }
 
 // AUX_VDDIO register (InvenSense demo code calls this RA_*G_OFFS_TC)
