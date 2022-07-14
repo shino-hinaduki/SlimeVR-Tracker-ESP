@@ -121,7 +121,7 @@
 #elif BOARD == BOARD_M5STICK_C
 #define PIN_IMU_SDA 21
 #define PIN_IMU_SCL 22
-#define PIN_IMU_INT 35
+#define PIN_IMU_INT 255
 #define PIN_IMU_INT_2 255
 #define PIN_BATTERY_LEVEL 255
 #define LED_PIN 9
